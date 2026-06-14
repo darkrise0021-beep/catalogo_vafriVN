@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo Vafri Noroeste</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#c8102e; --navy:#0a1628; --blue:#1a3a6b; --gold:#e8a020;
+  --light:#f4f6fa; --white:#fff; --gray:#8a94a6; --border:#e2e8f0;
+  --green:#1a7a4a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--light);color:var(--navy);min-height:100vh;}
+
+/* ── HEADER ── */
+header{background:var(--navy);color:white;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.3);}
+.header-inner{display:flex;align-items:center;gap:20px;padding:14px 24px;max-width:1300px;margin:0 auto;}
+.logo-text{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;}
+.logo-text span{color:var(--red);}
+.header-subtitle{font-size:11px;color:var(--gray);letter-spacing:1px;text-transform:uppercase;}
+.header-info{font-size:12px;color:rgba(255,255,255,.7);line-height:1.6;margin-left:auto;text-align:right;}
+
+.search-bar{background:rgba(0,0,0,.25);border-top:1px solid rgba(255,255,255,.08);padding:10px 24px;}
+.search-inner{max-width:1300px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+.search-inner input{flex:1;min-width:220px;padding:9px 14px;border-radius:8px;border:none;background:rgba(255,255,255,.12);color:white;font-family:'DM Sans',sans-serif;font-size:13px;}
+.search-inner input::placeholder{color:rgba(255,255,255,.45);}
+.search-inner input:focus{outline:2px solid var(--gold);background:rgba(255,255,255,.18);}
+.filter-btn{padding:7px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.25);background:transparent;color:rgba(255,255,255,.75);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.filter-btn:hover{background:rgba(255,255,255,.12);color:white;}
+.filter-btn.active{background:var(--red);border-color:var(--red);color:white;}
+.btn-clients{background:rgba(232,160,32,.15);border-color:var(--gold);color:var(--gold);}
+.btn-clients:hover{background:var(--gold);color:var(--navy);}
+.btn-edit-prices{background:rgba(26,122,74,.15);border-color:#4caf80;color:#4caf80;}
+.btn-edit-prices:hover{background:var(--green);color:white;}
+.btn-edit-prices.active{background:var(--green);border-color:var(--green);color:white;}
+
+/* ── MAIN ── */
+main{max-width:1300px;margin:0 auto;padding:20px 24px 80px;}
+.stats-bar{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
+.stat-chip{background:white;border-radius:10px;padding:12px 18px;box-shadow:0 1px 4px rgba(0,0,0,.07);min-width:90px;text-align:center;}
+.stat-chip .num{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--red);letter-spacing:1px;}
+.stat-chip .lbl{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;}
+.result-count{font-size:13px;color:var(--gray);margin-bottom:14px;}
+
+/* ── SECCIONES ── */
+.section-header{display:flex;align-items:center;gap:12px;margin:28px 0 12px;}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;color:var(--navy);}
+.section-badge{background:var(--navy);color:white;font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;}
+.section-line{flex:1;height:1px;background:var(--border);}
+
+/* ── TABLA ── */
+.catalog-table{width:100%;border-collapse:collapse;background:white;border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07);margin-bottom:10px;}
+.catalog-table thead th{background:var(--navy);color:white;padding:10px 12px;font-size:11px;font-weight:600;text-align:left;text-transform:uppercase;letter-spacing:.5px;}
+.catalog-table tbody td{padding:9px 12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle;}
+.catalog-table tbody tr:last-child td{border-bottom:none;}
+.catalog-table tbody tr:hover{background:#f8f9fc;}
+.fmsi-code{font-family:monospace;font-size:12px;background:var(--light);padding:2px 6px;border-radius:4px;color:var(--blue);}
+.clave-code{font-family:monospace;font-size:12px;background:#fff3e0;padding:2px 6px;border-radius:4px;color:#b35a00;}
+.price-cell{font-weight:600;color:var(--navy);}
+.price-empty{color:var(--border);}
+.no-results{text-align:center;color:var(--gray);padding:20px;font-size:13px;}
+.tag-pos{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;text-transform:uppercase;letter-spacing:.3px;}
+.tag-del{background:#e3f0ff;color:#1a3a6b;}
+.tag-tra{background:#fce8e8;color:#8b1a1a;}
+
+/* ── PRECIO EDITABLE ── */
+.price-wrap{display:flex;align-items:center;gap:6px;}
+.add-btn{border:none;background:var(--blue);color:white;width:22px;height:22px;border-radius:5px;font-size:14px;font-weight:700;line-height:1;cursor:pointer;flex-shrink:0;transition:background .15s;}
+.add-btn:hover{background:var(--red);}
+.editable-price{font-weight:600;color:var(--navy);border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;width:80px;text-align:right;cursor:default;}
+.edit-mode .editable-price{background:#fff8e1;border:1px solid var(--gold);border-radius:4px;padding:2px 4px;cursor:text;}
+
+/* ── FAB ── */
+.cart-fab{position:fixed;bottom:22px;right:22px;z-index:200;background:var(--red);color:white;border:none;border-radius:50px;padding:14px 22px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:14px;display:flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,.25);cursor:pointer;transition:transform .15s;}
+.cart-fab:hover{transform:translateY(-2px);}
+.cart-fab .badge{background:var(--navy);color:white;border-radius:50%;min-width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;padding:0 4px;}
+
+/* ── MODAL BASE ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(10,22,40,.6);z-index:300;align-items:center;justify-content:center;padding:16px;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:white;border-radius:12px;max-width:960px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,.3);}
+.modal-header{background:var(--navy);color:white;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:2;}
+.modal-header h2{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;font-weight:normal;}
+.modal-close{background:transparent;border:1px solid rgba(255,255,255,.3);color:white;border-radius:6px;width:32px;height:32px;font-size:16px;cursor:pointer;}
+.modal-body{padding:20px;}
+.modal-section{margin-bottom:20px;}
+.modal-section-title{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;color:var(--navy);margin-bottom:10px;border-bottom:2px solid var(--border);padding-bottom:4px;}
+
+/* ── FORM FIELDS ── */
+.field label{display:block;font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.field input,.field select,.field textarea{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--navy);}
+.field input:focus,.field select:focus{outline:2px solid var(--blue);}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.full{grid-column:1/-1;}
+
+/* ── MODAL CLIENTES ── */
+.client-search-bar{display:flex;gap:8px;margin-bottom:14px;}
+.client-search-bar input{flex:1;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;}
+.clients-list{max-height:260px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;margin-bottom:16px;}
+.client-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s;}
+.client-row:last-child{border-bottom:none;}
+.client-row:hover{background:var(--light);}
+.client-row.selected{background:#e8f0fb;}
+.client-avatar{width:36px;height:36px;border-radius:50%;background:var(--blue);color:white;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.client-info{flex:1;}
+.client-name{font-weight:600;font-size:13px;}
+.client-sub{font-size:11px;color:var(--gray);}
+.client-actions{display:flex;gap:6px;}
+.icon-btn{background:transparent;border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:12px;cursor:pointer;color:var(--gray);}
+.icon-btn:hover{border-color:var(--red);color:var(--red);}
+.icon-btn.use{border-color:var(--blue);color:var(--blue);}
+.icon-btn.use:hover{background:var(--blue);color:white;}
+.new-client-form{background:var(--light);border-radius:8px;padding:16px;margin-top:10px;}
+.new-client-form .form-title{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.5px;color:var(--navy);margin-bottom:12px;}
+
+/* ── MODAL COTIZACIÓN ── */
+.client-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.client-grid .full{grid-column:1/-1;}
+.cart-table{width:100%;border-collapse:collapse;font-size:13px;}
+.cart-table th{background:var(--light);color:var(--navy);text-align:left;padding:8px 10px;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);}
+.cart-table td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.cart-table input.qty-input{width:56px;padding:5px 6px;border:1px solid var(--border);border-radius:5px;text-align:center;font-size:13px;}
+.remove-btn{background:transparent;border:none;color:var(--red);font-size:16px;cursor:pointer;font-weight:700;}
+.empty-cart{text-align:center;color:var(--gray);padding:24px 10px;font-size:13px;}
+.discounts-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+.discounts-row .field{width:100px;}
+.iva-toggle{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--navy);margin-bottom:12px;}
+.totals-box{background:var(--light);border-radius:8px;padding:14px 16px;margin-top:8px;}
+.totals-row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;color:var(--navy);}
+.totals-row.discount{color:var(--red);}
+.totals-row.grand{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;border-top:2px solid var(--border);margin-top:8px;padding-top:10px;color:var(--navy);}
+.modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+.modal-actions button{flex:1;min-width:140px;padding:12px 16px;border-radius:8px;border:none;font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:opacity .15s;}
+.modal-actions button:hover{opacity:.88;}
+.btn-primary{background:var(--red);color:white;}
+.btn-secondary{background:var(--navy);color:white;}
+.btn-ghost{background:var(--light);color:var(--navy);border:1px solid var(--border)!important;}
+
+/* ── HOJA IMPRIMIBLE ── */
+.print-quote{display:none;}
+@media print{
+  body *{visibility:hidden;}
+  .print-quote,.print-quote *{visibility:visible;}
+  .print-quote{display:block;position:absolute;top:0;left:0;width:100%;padding:24px;}
+}
+.pq-header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid var(--navy);padding-bottom:10px;margin-bottom:14px;}
+.pq-logo{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px;color:var(--navy);}
+.pq-logo span{color:var(--red);}
+.pq-meta{text-align:right;font-size:12px;color:var(--gray);line-height:1.5;}
+.pq-client{margin-bottom:14px;font-size:13px;line-height:1.6;}
+.pq-client b{color:var(--navy);}
+.pq-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:14px;}
+.pq-table th{background:var(--navy);color:white;text-align:left;padding:6px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.5px;}
+.pq-table td{padding:6px 8px;border-bottom:1px solid var(--border);}
+.pq-table td.num,.pq-table th.num{text-align:right;}
+.pq-totals{max-width:320px;margin-left:auto;font-size:13px;}
+.pq-totals .row{display:flex;justify-content:space-between;padding:3px 0;}
+.pq-totals .row.grand{font-weight:700;font-size:16px;border-top:2px solid var(--navy);margin-top:6px;padding-top:8px;color:var(--navy);}
+.pq-note{margin-top:18px;font-size:11px;color:var(--gray);}
+
+/* ── NOTIFICACIÓN TOAST ── */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:500;opacity:0;transition:all .3s;pointer-events:none;z-index:500;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="logo-text"><span>vafri</span> noroeste</div>
+      <div class="header-subtitle">Catálogo de Productos</div>
+    </div>
+    <div class="header-info">
+      Asesor: David Aguilar Castrejón<br>
+      443-859-9943 &nbsp;|&nbsp; 443-279-8762<br>
+      Baja Cal · BCS · Sinaloa · Sonora
+    </div>
+  </div>
+  <div class="search-bar">
+    <div class="search-inner">
+      <input type="text" id="searchInput" placeholder="Buscar por clave, descripción, aplicación, marca, modelo..." oninput="filterTable()">
+      <button class="filter-btn active" onclick="setFilter('all',this)">Todos</button>
+      <button class="filter-btn" onclick="setFilter('clutch',this)">Pasta Clutch</button>
+      <button class="filter-btn" onclick="setFilter('tacon',this)">Tacón Cerametálico</button>
+      <button class="filter-btn" onclick="setFilter('balatas',this)">Balatas Ceramic</button>
+      <button class="filter-btn" onclick="setFilter('kit',this)">Kit Clutch</button>
+      <button class="filter-btn" onclick="setFilter('colhid',this)">Collarín Hidráulico</button>
+      <button class="filter-btn" onclick="setFilter('colmec',this)">Collarín Mecánico</button>
+      <button class="filter-btn" onclick="setFilter('disco',this)">Disco de Clutch</button>
+      <button class="filter-btn btn-edit-prices" id="btnEditPrices" onclick="toggleEditPrices(this)">✏️ Editar precios</button>
+      <button class="filter-btn btn-clients" onclick="openClients()">👤 Clientes</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="stats-bar">
+    <div class="stat-chip"><div class="num" id="totalCount">0</div><div class="lbl">Productos</div></div>
+    <div class="stat-chip"><div class="num">7</div><div class="lbl">Categorías</div></div>
+    <div class="stat-chip"><div class="num" id="clientCount">0</div><div class="lbl">Clientes</div></div>
+    <div class="stat-chip"><div class="num">4</div><div class="lbl">Rutas</div></div>
+  </div>
+  <p class="result-count" id="resultCount"></p>
+
+  <!-- PASTA CLUTCH -->
+  <div class="section-header" id="sec-clutch">
+    <div class="section-title">Pasta para Clutch</div>
+    <span class="section-badge">Marca Vafri</span>
+    <div class="section-line"></div>
+  </div>
+  <table class="catalog-table" id="tableCLUTCH">
+    <thead><tr><th>FMSI</th><th>Aplicación</th><th>VFB</th><th>VFC</th><th>VFR</th><th>VFK</th></tr></thead>
+    <tbody id="bodyClutch"></tbody>
+  </table>
+
+  <!-- TACON -->
+  <div class="section-header" id="sec-tacon">
+    <div class="section-title">Tacón Cerametálico & Pasta Tacón</div>
+    <span class="section-badge">Vafri Ceramic</span>
+    <div class="section-line"></div>
+  </div>
+  <table class="catalog-table" id="tableTACON">
+    <thead><tr><th>FMSI</th><th>Clave Int.</th><th>Descripción</th><th>Precio</th></tr></thead>
+    <tbody id="bodyTacon"></tbody>
+  </table>
+
+  <!-- BALATAS -->
+  <div class="section-header" id="sec-balatas">
+    <div class="section-title">Balatas Cerámicas</div>
+    <span class="section-badge">Vafri Ceramic</span>
+    <div class="section-line"></div>
+  </div>
+  <table class="catalog-table" id="tableBALATAS">
+    <thead><tr><th>Clave</th><th>FMSI</th><th>Posición</th><th>Descripción</th><th>Costo</th></tr></thead>
+    <tbody id="bodyBalatas"></tbody>
+  </table>
+
+  <!-- KIT CLUTCH -->
+  <div class="section-header" id="sec-kit">
+    <div class="section-title">Kit Clutch</div>
+    <span class="section-badge">Vafri Ceramic</span>
+    <div class="section-line"></div>
+  </div>
+  <table class="catalog-table" id="tableKIT">
+    <thead><tr><th>Clave Vafri</th><th>Ref. FMSI</th><th>Descripción</th><th>Precio</th></tr></thead>
+    <tbody id="bodyKit"></tbody>
+  </table>
+
+  <!-- COLLARÍN HIDRÁULICO -->
+  <div class="section-header" id="sec-colhid">
+    <div class="section-title">Collarín Hidráulico</div>
+    <span class="section-badge">Vafri Ceramic</span>
+    <div class="section-line"></div>
+  </div>
+  <table class="catalog-table" id="tableCOLHID">
+    <thead><tr><th>Clave</th><th>Ref.</th><th>Descripción</th><th>Precio</th></tr></thead>
+    <tbody id="bodyColHid"></tbody>
+  </table>
+
+  <!-- COLLARÍN MECÁNICO -->
+  <div class="section-header" id="sec-colmec">
+    <div class="section-title">Collarín Mecánico</div>
+    <span class="section-badge">Vafri Ceramic</span>
+    <div class="section-line"></div>
+  </div>
+  <table class="catalog-table" id="tableCOLMEC">
+    <thead><tr><th>Clave</th><th>Ref.</th><th>Descripción</th><th>Precio</th></tr></thead>
+    <tbody id="bodyColMec"></tbody>
+  </table>
+
+  <!-- DISCO DE CLUTCH -->
+  <div class="section-header" id="sec-disco">
+    <div class="section-title">Disco de Clutch</div>
+    <span class="section-badge">Vafri Ceramic</span>
+    <div class="section-line"></div>
+  </div>
+  <table class="catalog-table" id="tableDISCO">
+    <thead><tr><th>Clave</th><th>Ref.</th><th>Descripción</th><th>Precio</th></tr></thead>
+    <tbody id="bodyDisco"></tbody>
+  </table>
+</main>
+
+<!-- FAB -->
+<button class="cart-fab" onclick="openCart()">🧾 Cotización <span class="badge" id="cartBadge">0</span></button>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- MODAL CLIENTES -->
+<div class="modal-overlay" id="clientsModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>Base de Clientes</h2>
+      <button class="modal-close" onclick="closeClients()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="client-search-bar">
+        <input type="text" id="clientSearch" placeholder="Buscar cliente por nombre, empresa o ciudad..." oninput="renderClientList()">
+        <button class="filter-btn btn-clients" onclick="toggleNewClientForm()" id="btnAddClient">+ Nuevo cliente</button>
+      </div>
+      <div class="clients-list" id="clientsList"></div>
+      <div id="newClientForm" style="display:none">
+        <div class="new-client-form">
+          <div class="form-title" id="clientFormTitle">Nuevo cliente</div>
+          <div class="grid-2" style="gap:10px">
+            <div class="field full"><label>Empresa / Negocio</label><input type="text" id="fc_empresa" placeholder="Clutch y Frenos Guasave"></div>
+            <div class="field"><label>Nombre de contacto</label><input type="text" id="fc_nombre" placeholder="Florina Diaz Valenzuela"></div>
+            <div class="field"><label>Teléfono</label><input type="text" id="fc_telefono" placeholder="667-123-4567"></div>
+            <div class="field"><label>Correo electrónico</label><input type="email" id="fc_email" placeholder="correo@empresa.com"></div>
+            <div class="field"><label>Ciudad / Estado</label><input type="text" id="fc_ciudad" placeholder="Guasave, Sinaloa"></div>
+            <div class="field"><label>Descuento habitual (%)</label><input type="number" id="fc_desc" min="0" max="100" placeholder="0"></div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:14px;">
+            <button class="btn-primary modal-actions" style="flex:1;padding:10px;border-radius:8px;border:none;font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;cursor:pointer;" onclick="saveClient()">Guardar cliente</button>
+            <button class="btn-ghost modal-actions" style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--light);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;" onclick="cancelClientForm()">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL COTIZACIÓN -->
+<div class="modal-overlay" id="cartModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>Generar Cotización</h2>
+      <button class="modal-close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <div class="modal-section-title">Datos del cliente</div>
+        <div class="client-grid">
+          <div class="field full"><label>Empresa / Negocio</label><input type="text" id="cliEmpresa" placeholder="Clutch y Frenos Guasave"></div>
+          <div class="field"><label>Nombre de contacto</label><input type="text" id="cliNombre" placeholder="Florina Diaz Valenzuela"></div>
+          <div class="field"><label>Ubicación</label><input type="text" id="cliUbicacion" placeholder="Guasave, Sinaloa"></div>
+          <div class="field"><label>Correo para envío</label><input type="email" id="cliEmail" placeholder="correo@cliente.com"></div>
+          <div class="field"><label>Teléfono</label><input type="text" id="cliTel" placeholder="667-123-4567"></div>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Artículos seleccionados</div>
+        <table class="cart-table">
+          <thead><tr><th>Clave</th><th>Descripción</th><th>Cant.</th><th>Precio</th><th>Importe</th><th></th></tr></thead>
+          <tbody id="cartBody"></tbody>
+        </table>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Descuentos e impuestos</div>
+        <div class="discounts-row">
+          <div class="field"><label>Descuento 1 (%)</label><input type="number" id="desc1" min="0" max="100" value="0" oninput="renderCart()"></div>
+          <div class="field"><label>Descuento 2 (%)</label><input type="number" id="desc2" min="0" max="100" value="0" oninput="renderCart()"></div>
+          <div class="field"><label>Descuento 3 (%)</label><input type="number" id="desc3" min="0" max="100" value="0" oninput="renderCart()"></div>
+        </div>
+        <label class="iva-toggle"><input type="checkbox" id="ivaToggle" checked onchange="renderCart()"> Aplicar IVA (16%)</label>
+      </div>
+      <div class="totals-box" id="totalsBox"></div>
+      <div class="modal-actions">
+        <button class="btn-ghost" onclick="clearCart()">Vaciar</button>
+        <button class="btn-secondary" onclick="printQuote()">🖨️ PDF / Imprimir</button>
+        <button class="btn-primary" onclick="emailQuote()">✉️ Enviar por correo</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOJA IMPRIMIBLE -->
+<div class="print-quote" id="printQuote"></div>
+
+<script>
+const clutchData = [
+  // Pág 1 de 4
+  {fmsi:"512P", aplicacion:"Agrícola", vfb:"$63.00", vfc:"", vfr:"", vfk:""},
+  {fmsi:"512AP", aplicacion:"Agrícola (Sobremedida)", vfb:"$94.00", vfc:"", vfr:"", vfk:""},
+  {fmsi:"A600P", aplicacion:"Agrícola", vfb:"$71.00", vfc:"", vfr:"", vfk:""},
+  {fmsi:"600P", aplicacion:"Agrícola", vfb:"$84.00", vfc:"", vfr:"", vfk:""},
+  {fmsi:"614P", aplicacion:"Agrícola", vfb:"$78.00", vfc:"", vfr:"", vfk:""},
+  {fmsi:"614AP", aplicacion:"Agrícola (Sobremedida)", vfb:"$117.00", vfc:"", vfr:"", vfk:""},
+  {fmsi:"736E", aplicacion:"Nissan Platina", vfb:"$79.00", vfc:"$99.00", vfr:"$114.00", vfk:""},
+  {fmsi:"736G", aplicacion:"VW Sedán (Doble Laina)", vfb:"$66.00", vfc:"$97.00", vfr:"", vfk:""},
+  {fmsi:"736P", aplicacion:"Nissan Platina (Adaptaciones)", vfb:"", vfc:"$97.00", vfr:"", vfk:""},
+  {fmsi:"743", aplicacion:"Dodge Atos, Matiz (6 lainas)", vfb:"", vfc:"$75.00", vfr:"", vfk:""},
+  {fmsi:"743B", aplicacion:"Chevrolet Matiz, Dodge Atos (Pista ancha)", vfb:"", vfc:"$86.00", vfr:"", vfk:""},
+  {fmsi:"747", aplicacion:"Dodge Atos, Matiz (8 lainas)", vfb:"", vfc:"$75.00", vfr:"", vfk:""},
+  {fmsi:"750C", aplicacion:"VW Sedán, Datsun 1600", vfb:"$69.00", vfc:"$108.00", vfr:"$122.00", vfk:""},
+  {fmsi:"750P", aplicacion:"VW Sedán, Datsun 1600 (Adaptaciones)", vfb:"$69.00", vfc:"$108.00", vfr:"$122.00", vfk:""},
+  {fmsi:"785-7088", aplicacion:"Ford Fiesta Ikon (Espesor 3.2mm)", vfb:"$64.00", vfc:"$92.00", vfr:"$112.00", vfk:""},
+  {fmsi:"785A", aplicacion:"Nissan Tsuru III, VW Caribe y Atlantic", vfb:"$58.00", vfc:"$93.00", vfr:"$112.00", vfk:"$136.00"},
+  {fmsi:"785AP", aplicacion:"Nissan Tsuru III, VW Caribe y Atlantic (Adaptaciones)", vfb:"", vfc:"$93.00", vfr:"", vfk:""},
+  {fmsi:"785P", aplicacion:"Ford Fiesta Ikon (Adaptaciones, espesor 3.2mm)", vfb:"", vfc:"$92.00", vfr:"", vfk:""},
+  {fmsi:"788", aplicacion:"VW Caribe y Atlantic", vfb:"", vfc:"$99.00", vfr:"", vfk:""},
+  {fmsi:"788P", aplicacion:"VW Caribe y Atlantic (Adaptaciones)", vfb:"", vfc:"$99.00", vfr:"", vfk:""},
+  {fmsi:"796", aplicacion:"Nissan Tsuru I y II", vfb:"$51.00", vfc:"$75.00", vfr:"", vfk:""},
+  {fmsi:"796P", aplicacion:"Nissan Tsuru I y II (Adaptaciones)", vfb:"", vfc:"$75.00", vfr:"", vfk:""},
+  {fmsi:"8002", aplicacion:"Nissan Datsun 1500 y 1600", vfb:"$69.00", vfc:"$108.00", vfr:"", vfk:""},
+  {fmsi:"8002P", aplicacion:"Nissan Datsun 1500 y 1600 (Adaptaciones)", vfb:"$70.00", vfc:"$108.00", vfr:"", vfk:""},
+  {fmsi:"8013A", aplicacion:"Nissan Datsun 1800", vfb:"$88.00", vfc:"$137.00", vfr:"$153.00", vfk:""},
+  {fmsi:"8013EP", aplicacion:"Nissan Datsun 1800 (Adaptaciones sobre medida)", vfb:"", vfc:"$123.00", vfr:"$136.00", vfk:""},
+  {fmsi:"8013P", aplicacion:"Nissan Datsun 1800 (Adaptaciones)", vfb:"$88.00", vfc:"$137.00", vfr:"$153.00", vfk:"$201.00"},
+  {fmsi:"8021", aplicacion:"Tornado, Corsa y Astra", vfb:"", vfc:"$112.00", vfr:"$128.00", vfk:""},
+  {fmsi:"8036", aplicacion:"Toyota", vfb:"", vfc:"$127.00", vfr:"", vfk:""},
+  {fmsi:"8036T", aplicacion:"Nissan Tida, Sentra", vfb:"", vfc:"$127.00", vfr:"$145.00", vfk:""},
+  {fmsi:"8036P", aplicacion:"Toyota (Adaptaciones)", vfb:"", vfc:"$127.00", vfr:"", vfk:""},
+  {fmsi:"8037", aplicacion:"Ford, Toyota (8 Lainas)", vfb:"$88.00", vfc:"$127.00", vfr:"$153.00", vfk:"$201.00"},
+  {fmsi:"8037A", aplicacion:"Ford, Toyota (9 Lainas)", vfb:"$88.00", vfc:"$137.00", vfr:"$153.00", vfk:""},
+  {fmsi:"8037B", aplicacion:"Ford, Toyota (8 Lainas, 4.2mm)", vfb:"", vfc:"$169.00", vfr:"", vfk:""},
+  {fmsi:"8038", aplicacion:"Volkswagen Beetle, Bora", vfb:"", vfc:"$131.00", vfr:"$150.00", vfk:""},
+  {fmsi:"8048-8098-8048VT", aplicacion:"VW Golf, Jetta", vfb:"$70.00", vfc:"$104.00", vfr:"$122.00", vfk:"$163.00"},
+  {fmsi:"8048P-8098P", aplicacion:"VW Golf, Jetta (Adaptaciones)", vfb:"", vfc:"$104.00", vfr:"$122.00", vfk:""},
+  {fmsi:"8048T", aplicacion:"VW Jetta Turbo", vfb:"", vfc:"$123.00", vfr:"$143.00", vfk:""},
+  {fmsi:"8056A", aplicacion:"Chevrolet Aveo", vfb:"", vfc:"$125.00", vfr:"", vfk:""},
+  {fmsi:"8057", aplicacion:"Honda Accord", vfb:"$82.00", vfc:"$102.00", vfr:"", vfk:""},
+  {fmsi:"8057P", aplicacion:"Honda (Adaptaciones)", vfb:"$82.00", vfc:"$102.00", vfr:"", vfk:""},
+  {fmsi:"8058", aplicacion:"Seat Ibiza", vfb:"", vfc:"$123.00", vfr:"", vfk:""},
+  {fmsi:"8058A", aplicacion:"Ford Ranger, Aerostar", vfb:"", vfc:"$137.00", vfr:"", vfk:""},
+  {fmsi:"8058B", aplicacion:"Ford Ranger 2.3 L, 3.0 L", vfb:"", vfc:"$139.00", vfr:"", vfk:""},
+  {fmsi:"8064", aplicacion:"Ford Ecosport", vfb:"", vfc:"$134.00", vfr:"", vfk:""},
+  {fmsi:"8204", aplicacion:"Combi Caravelle", vfb:"$101.00", vfc:"$157.00", vfr:"$177.00", vfk:""},
+  {fmsi:"V8204", aplicacion:"Combi Caravelle (Espesor 4.75mm)", vfb:"", vfc:"$192.00", vfr:"", vfk:""},
+  {fmsi:"8204P", aplicacion:"Combi Caravelle (Adaptaciones)", vfb:"", vfc:"$157.00", vfr:"", vfk:""},
+  {fmsi:"831-8007-831VT", aplicacion:"Chrysler Dart K, Topaz", vfb:"$84.00", vfc:"$125.00", vfr:"$143.00", vfk:""},
+  {fmsi:"831A", aplicacion:"Chrysler Dart K, Topaz (Sobremedida 4.0mm)", vfb:"", vfc:"$137.00", vfr:"", vfk:""},
+  {fmsi:"831D", aplicacion:"Chrysler Dart K, Topaz (Espesor delgado 3.2mm)", vfb:"", vfc:"$114.00", vfr:"", vfk:""},
+  {fmsi:"831P-8007P", aplicacion:"Chrysler Dart K, Topaz (Adaptaciones)", vfb:"$84.00", vfc:"$125.00", vfr:"$143.00", vfk:"$186.00"},
+  {fmsi:"831AP", aplicacion:"Chrysler Dart K, Topaz (Adaptaciones, sobremedida 4.0mm)", vfb:"", vfc:"$137.00", vfr:"", vfk:""},
+  {fmsi:"834", aplicacion:"Honda Civic", vfb:"$84.00", vfc:"$125.00", vfr:"", vfk:""},
+  {fmsi:"852", aplicacion:"VW Pointer", vfb:"", vfc:"$129.00", vfr:"", vfk:""},
+  {fmsi:"8659", aplicacion:"Ford Ecosport (pista ancha)", vfb:"", vfc:"$128.00", vfr:"$147.00", vfk:""},
+  // Pág 2 de 4
+  {fmsi:"8805-8096", aplicacion:"Volkswagen Eurovan", vfb:"", vfc:"$137.00", vfr:"$156.00", vfk:""},
+  {fmsi:"8907", aplicacion:"Mondeo, Focus", vfb:"$88.00", vfc:"$109.00", vfr:"$133.00", vfk:""},
+  {fmsi:"8907P", aplicacion:"Mondeo, Focus (Adaptaciones)", vfb:"", vfc:"", vfr:"$133.00", vfk:""},
+  {fmsi:"8909", aplicacion:"Mondeo, Focus (perforación de 1029)", vfb:"", vfc:"$109.00", vfr:"$133.00", vfk:""},
+  {fmsi:"9038", aplicacion:"Nissan 2.4 L (9 Lainas)", vfb:"", vfc:"$172.00", vfr:"$188.00", vfk:""},
+  {fmsi:"9040-9240L-9038V", aplicacion:"Nissan 2.4 L (Luk)", vfb:"$110.00", vfc:"$172.00", vfr:"$188.00", vfk:"$254.00"},
+  {fmsi:"9040A", aplicacion:"Nissan 2.4 L (Sobremedida 4.0mm)", vfb:"", vfc:"$186.00", vfr:"", vfk:""},
+  {fmsi:"9040H", aplicacion:"Hyundai H100", vfb:"", vfc:"$162.00", vfr:"$184.00", vfk:""},
+  {fmsi:"9040P", aplicacion:"Nissan 2.4 L (Adaptaciones)", vfb:"$110.00", vfc:"$172.00", vfr:"$188.00", vfk:"$254.00"},
+  {fmsi:"9040S", aplicacion:"Nissan 2.4 L", vfb:"", vfc:"$172.00", vfr:"", vfk:""},
+  {fmsi:"9040U-9045", aplicacion:"Nissan Urvan 2.5L", vfb:"", vfc:"$175.00", vfr:"$198.00", vfk:""},
+  {fmsi:"9042", aplicacion:"Toyota V6", vfb:"", vfc:"$162.00", vfr:"", vfk:""},
+  {fmsi:"9049", aplicacion:"Ford Explorer", vfb:"$108.00", vfc:"$142.00", vfr:"$173.00", vfk:""},
+  {fmsi:"9049P", aplicacion:"Ford Explorer (Adaptaciones)", vfb:"", vfc:"", vfr:"$173.00", vfk:""},
+  {fmsi:"9050-9087", aplicacion:"Ford V6 Doble Perforación", vfb:"", vfc:"$142.00", vfr:"", vfk:""},
+  {fmsi:"9051-9086", aplicacion:"Nissan V6", vfb:"", vfc:"$178.00", vfr:"$200.00", vfk:""},
+  {fmsi:"V9051", aplicacion:"Nissan Turbo Diesel", vfb:"", vfc:"$178.00", vfr:"$200.00", vfk:""},
+  {fmsi:"9051P", aplicacion:"Nissan V6 (Adaptaciones)", vfb:"", vfc:"$178.00", vfr:"$200.00", vfk:""},
+  {fmsi:"9051AP", aplicacion:"Nissan V6 (Sobremedida Adaptaciones)", vfb:"", vfc:"$201.00", vfr:"", vfk:""},
+  {fmsi:"9063", aplicacion:"Nissan Ichi-Van 2.4 L (Sachs)", vfb:"", vfc:"$162.00", vfr:"", vfk:""},
+  {fmsi:"9068T", aplicacion:"Ford Transit", vfb:"", vfc:"$178.00", vfr:"$200.00", vfk:""},
+  {fmsi:"909E-909D", aplicacion:"Chevrolet Cavalier, Cutlas", vfb:"$93.00", vfc:"$143.00", vfr:"$161.00", vfk:"$210.00"},
+  {fmsi:"909D", aplicacion:"Chevrolet Cavalier, Cutlas (Delgada 3.2mm)", vfb:"", vfc:"$129.00", vfr:"", vfk:""},
+  {fmsi:"909P", aplicacion:"Chevrolet Cavalier, Cutlas (Adaptaciones)", vfb:"$93.00", vfc:"$143.00", vfr:"$161.00", vfk:""},
+  {fmsi:"9161-9045", aplicacion:"Chevrolet S-10", vfb:"", vfc:"$139.00", vfr:"$165.00", vfk:""},
+  {fmsi:"9209", aplicacion:"Nissan Pick up, 2.4 lts 8 Lainas", vfb:"", vfc:"$159.00", vfr:"$181.00", vfk:""},
+  {fmsi:"953", aplicacion:"Tractor Massey Ferguson Agrícola", vfb:"", vfc:"$167.00", vfr:"", vfk:""},
+  {fmsi:"9863", aplicacion:"Toyota Hiace", vfb:"", vfc:"$182.00", vfr:"$206.00", vfk:""},
+  {fmsi:"990P", aplicacion:"Chevrolet", vfb:"", vfc:"$143.00", vfr:"", vfk:""},
+  {fmsi:"993A", aplicacion:"Valiant, Volare", vfb:"", vfc:"$135.00", vfr:"$157.00", vfk:""},
+  {fmsi:"993P", aplicacion:"Valiant, Volare (Adaptaciones)", vfb:"", vfc:"$135.00", vfr:"$157.00", vfk:""},
+  {fmsi:"996P", aplicacion:"Ford Contour, Mystique (Adaptaciones)", vfb:"$115.00", vfc:"$143.00", vfr:"$164.00", vfk:""},
+  {fmsi:"996AP", aplicacion:"Ford Contour, Mystique (Sobremedida Adaptaciones)", vfb:"", vfc:"$157.00", vfr:"", vfk:""},
+  {fmsi:"1005A", aplicacion:"Ford (8 Lainas)", vfb:"", vfc:"$153.00", vfr:"", vfk:""},
+  {fmsi:"1005AP", aplicacion:"Ford (Adaptaciones, sobremedida 4.0mm)", vfb:"", vfc:"$170.00", vfr:"", vfk:""},
+  {fmsi:"1005B", aplicacion:"Ford (10 Lainas)", vfb:"", vfc:"$153.00", vfr:"", vfk:""},
+  {fmsi:"1005P", aplicacion:"Ford (Adaptaciones)", vfb:"", vfc:"$153.00", vfr:"", vfk:""},
+  {fmsi:"1005R", aplicacion:"Ford (8 Lainas)", vfb:"", vfc:"$175.00", vfr:"", vfk:""},
+  {fmsi:"1025", aplicacion:"Chevy", vfb:"$74.00", vfc:"$93.00", vfr:"$109.00", vfk:""},
+  {fmsi:"1026", aplicacion:"Dodge Neon, Stratus, Chrysler Dart K, Volare K y Sentra", vfb:"$82.00", vfc:"$102.00", vfr:"", vfk:""},
+  {fmsi:"1026P", aplicacion:"Dodge Neon, Stratus (Adaptaciones)", vfb:"", vfc:"$102.00", vfr:"", vfk:""},
+  {fmsi:"1027", aplicacion:"VW Jetta, Golf A4, Ford Ranger", vfb:"", vfc:"$155.00", vfr:"$175.00", vfk:""},
+  {fmsi:"1027P", aplicacion:"VW Jetta, Golf A4, Ford Ranger (Adaptaciones)", vfb:"", vfc:"$155.00", vfr:"", vfk:""},
+  {fmsi:"1028", aplicacion:"Ford Ikon", vfb:"", vfc:"$110.00", vfr:"", vfk:""},
+  {fmsi:"1029", aplicacion:"Ford Focus", vfb:"", vfc:"$143.00", vfr:"", vfk:""},
+  {fmsi:"1057P", aplicacion:"Chevrolet Ford (Adaptaciones)", vfb:"", vfc:"$175.00", vfr:"", vfk:""},
+  {fmsi:"1057AP", aplicacion:"Chevrolet Ford (Adaptaciones, sobremedida 4.0mm)", vfb:"", vfc:"$196.00", vfr:"", vfk:""},
+  {fmsi:"1059A", aplicacion:"Chevrolet/VAM", vfb:"", vfc:"$188.00", vfr:"", vfk:""},
+  {fmsi:"1059AP", aplicacion:"Chevrolet/VAM (Adaptaciones, sobremedida 4.0mm)", vfb:"", vfc:"$213.00", vfr:"", vfk:""},
+  {fmsi:"1059P", aplicacion:"Chevrolet/VAM (Adaptaciones)", vfb:"", vfc:"$188.00", vfr:"", vfk:""},
+  {fmsi:"1078P", aplicacion:"Toyota Hilux, Mitsubishi L-200 (Adaptaciones)", vfb:"", vfc:"$213.00", vfr:"$247.00", vfk:""},
+  {fmsi:"10026-11016", aplicacion:"Dodge Ram", vfb:"", vfc:"$221.00", vfr:"", vfk:""},
+  {fmsi:"11004", aplicacion:"Chevrolet, Pick-Up 3 1/2 Tons", vfb:"$190.00", vfc:"$284.00", vfr:"$322.00", vfk:""},
+  {fmsi:"11004P", aplicacion:"Chevrolet (Adaptaciones)", vfb:"$190.00", vfc:"$284.00", vfr:"$322.00", vfk:""},
+  {fmsi:"11010", aplicacion:"Pick-Up Chrysler, GM (Remache7)", vfb:"", vfc:"$224.00", vfr:"$268.00", vfk:""},
+  {fmsi:"11012", aplicacion:"Tractor Fordson", vfb:"", vfc:"$251.00", vfr:"$279.00", vfk:""},
+  // Pág 3 de 4
+  {fmsi:"11013", aplicacion:"Ford embrague hidráulico (9 lainas)", vfb:"", vfc:"$178.00", vfr:"$204.00", vfk:""},
+  {fmsi:"11013B", aplicacion:"Chevrolet GMT 800 4.3 Lts. V6 (Valeo F491)", vfb:"", vfc:"$178.00", vfr:"", vfk:""},
+  {fmsi:"11013P", aplicacion:"Ford embrague hidráulico (Adaptaciones)", vfb:"", vfc:"$178.00", vfr:"$204.00", vfk:""},
+  {fmsi:"11014", aplicacion:"Ford Pick-up, Microbus (8 lainas)", vfb:"", vfc:"$178.00", vfr:"", vfk:""},
+  {fmsi:"11020-11065", aplicacion:"Chevrolet Pick-Up", vfb:"", vfc:"$234.00", vfr:"", vfk:""},
+  {fmsi:"11020P", aplicacion:"Chevrolet Pick-Up (Adaptaciones)", vfb:"", vfc:"$234.00", vfr:"$271.00", vfk:""},
+  {fmsi:"11027-1158", aplicacion:"Ford Pick-Up 5.8 Lts", vfb:"", vfc:"$206.00", vfr:"$242.00", vfk:""},
+  {fmsi:"11027A", aplicacion:"Ford Pick-Up 5.8 Lts (Sobremedida 4.00 mm)", vfb:"", vfc:"$247.00", vfr:"", vfk:""},
+  {fmsi:"11048", aplicacion:"Ford Lobo, Excursion 4.6 Lts. V8", vfb:"$205.00", vfc:"$256.00", vfr:"$288.00", vfk:"$386.00"},
+  {fmsi:"11048E", aplicacion:"Ford Lobo (Espesor 3.4 mm)", vfb:"", vfc:"", vfr:"$269.00", vfk:""},
+  {fmsi:"11048EP", aplicacion:"Ford Lobo (Espesor 3.4 mm adaptaciones)", vfb:"", vfc:"", vfr:"$269.00", vfk:""},
+  {fmsi:"11048P", aplicacion:"Ford Lobo (Adaptaciones)", vfb:"", vfc:"", vfr:"$288.00", vfk:""},
+  {fmsi:"11048R-11049", aplicacion:"Chevrolet Ram 4000", vfb:"", vfc:"$225.00", vfr:"$269.00", vfk:""},
+  {fmsi:"11078", aplicacion:"Tractor Massey Ferguson", vfb:"", vfc:"$288.00", vfr:"$318.00", vfk:""},
+  {fmsi:"11078P", aplicacion:"Tractor Massey Ferguson (Adaptaciones)", vfb:"", vfc:"$288.00", vfr:"", vfk:""},
+  {fmsi:"11098", aplicacion:"Ford Triton", vfb:"", vfc:"$276.00", vfr:"$321.00", vfk:""},
+  {fmsi:"11098S", aplicacion:"Ford Triton 450", vfb:"", vfc:"$291.00", vfr:"$333.00", vfk:""},
+  {fmsi:"1148", aplicacion:"Chevrolet, Pick-Up 3 1/2 Tons (Sobremedida 11004)", vfb:"", vfc:"$344.00", vfr:"", vfk:""},
+  {fmsi:"1166", aplicacion:"Chrysler lado opuesto sobreline; Ford", vfb:"", vfc:"$224.00", vfr:"$271.00", vfk:""},
+  {fmsi:"1166A", aplicacion:"Pick-Up Chrysler, GM, Ford (Remache3)", vfb:"$157.00", vfc:"$208.00", vfr:"$252.00", vfk:""},
+  {fmsi:"1166B", aplicacion:"Pick-Up Chrysler, GM, Ford (Sobremedida 4.0mm)", vfb:"$186.00", vfc:"$264.00", vfr:"$310.00", vfk:""},
+  {fmsi:"1166BP", aplicacion:"Pick-Up Chrysler, GM, Ford (Sobremedida 4.0 mm)", vfb:"", vfc:"$264.00", vfr:"$310.00", vfk:""},
+  {fmsi:"1166P", aplicacion:"Chrysler, Ford (Adaptaciones)", vfb:"$157.00", vfc:"$224.00", vfr:"$271.00", vfk:""},
+  {fmsi:"1169-1178L-1123", aplicacion:"Chevrolet Heavy Duty GMT 800 V6", vfb:"", vfc:"$232.00", vfr:"$268.00", vfk:"$350.00"},
+  {fmsi:"1169B", aplicacion:"Chevrolet Heavy Duty GMT 800 V6 (Sobremedida 4.0)", vfb:"", vfc:"$278.00", vfr:"", vfk:""},
+  {fmsi:"1177-1122", aplicacion:"Dogde RAM 2500, 3500", vfb:"$191.00", vfc:"$284.00", vfr:"$322.00", vfk:""},
+  {fmsi:"1183", aplicacion:"Chevrolet Heavy Duty GMT 800", vfb:"", vfc:"$272.00", vfr:"", vfk:""},
+  {fmsi:"1188", aplicacion:"G Motors 3 1/2 tons. Heavy Duty", vfb:"", vfc:"$218.00", vfr:"$252.00", vfk:"$328.00"},
+  {fmsi:"1188A", aplicacion:"G Motors 3 1/2 tons. (Sobremedida 4.2mm)", vfb:"", vfc:"$261.00", vfr:"$302.00", vfk:""},
+  {fmsi:"1188P", aplicacion:"G Motors 3 1/2 tons. Heavy Duty (Adaptaciones)", vfb:"", vfc:"", vfr:"$252.00", vfk:""},
+  {fmsi:"12090", aplicacion:"Ford Super Duty (Gasolina)", vfb:"", vfc:"$325.00", vfr:"$367.00", vfk:""},
+  {fmsi:"1226", aplicacion:"Ford F-350 Super Duty 5.4 Lts. V8", vfb:"", vfc:"$323.00", vfr:"", vfk:""},
+  {fmsi:"1227", aplicacion:"Ford Super Duty Gasolina (Valeo F491)", vfb:"", vfc:"$323.00", vfr:"", vfk:""},
+  {fmsi:"1233C", aplicacion:"Disco, F-600, D-600, C60 Disco Rígido", vfb:"$223.00", vfc:"$335.00", vfr:"$372.00", vfk:""},
+  {fmsi:"1233P", aplicacion:"Disco, F-600, D-600, C60 Disco Rígido (Adaptaciones)", vfb:"", vfc:"$335.00", vfr:"", vfk:""},
+  {fmsi:"1235", aplicacion:"Tractor Internacional", vfb:"", vfc:"$284.00", vfr:"$323.00", vfk:""},
+  {fmsi:"1235A", aplicacion:"Tractor Internacional (Sobremedida 4.0mm)", vfb:"", vfc:"$341.00", vfr:"", vfk:""},
+  {fmsi:"1236B", aplicacion:"Disco, F-600, D-600, C60 Disco Rígido", vfb:"$286.00", vfc:"$357.00", vfr:"$390.00", vfk:""},
+  {fmsi:"1236C", aplicacion:"F-600, D-600, C-60", vfb:"", vfc:"$357.00", vfr:"", vfk:""},
+  {fmsi:"1236D", aplicacion:"F-600, D-600, C-60 (Sobremedida 4.2mm)", vfb:"", vfc:"$429.00", vfr:"", vfk:""},
+  {fmsi:"1236P", aplicacion:"Disco, F-600, D-600, C60 Disco Rígido (Adaptaciones)", vfb:"", vfc:"$357.00", vfr:"", vfk:""},
+  {fmsi:"1281", aplicacion:"Tractor John Deere", vfb:"", vfc:"$372.00", vfr:"", vfk:""},
+  {fmsi:"1281P", aplicacion:"Tractor John Deere (Adaptaciones)", vfb:"", vfc:"$372.00", vfr:"", vfk:""},
+  {fmsi:"1312", aplicacion:"Disco 14\" (Spicer)", vfb:"$355.00", vfc:"$404.00", vfr:"$569.00", vfk:""},
+  {fmsi:"1312E-1367", aplicacion:"Disco 14\" (Spicer 3.75mm)", vfb:"", vfc:"$404.00", vfr:"$558.00", vfk:""},
+  {fmsi:"1312EP", aplicacion:"Disco 14\" (Spicer Adaptaciones 3.75mm)", vfb:"", vfc:"$404.00", vfr:"$558.00", vfk:""},
+  {fmsi:"1312P", aplicacion:"Disco 14\" (Spicer Adaptaciones)", vfb:"", vfc:"$414.00", vfr:"$583.00", vfk:""},
+  {fmsi:"1386", aplicacion:"Disco 14\" Mercedes Benz", vfb:"", vfc:"$464.00", vfr:"$520.00", vfk:""},
+  {fmsi:"1386A", aplicacion:"Disco 14\" Mercedes Benz (Sobremedida 5.0mm)", vfb:"", vfc:"$478.00", vfr:"", vfk:""},
+  {fmsi:"1386P", aplicacion:"Disco 14\" Mercedes Benz", vfb:"", vfc:"$478.00", vfr:"", vfk:""},
+  {fmsi:"13FSD-1298", aplicacion:"Ford Super Duty", vfb:"", vfc:"$325.00", vfr:"$367.00", vfk:"$475.00"},
+  {fmsi:"13FSDP-1298P", aplicacion:"Ford Super Duty (Adaptaciones)", vfb:"", vfc:"$325.00", vfr:"$367.00", vfk:""},
+  {fmsi:"1429", aplicacion:"Mercedes Benz Panorámico", vfb:"", vfc:"$377.00", vfr:"$421.00", vfk:"$496.00"},
+  {fmsi:"1429A-1493", aplicacion:"Mercedes Benz Panorámico (Sobremedida 4.3mm)", vfb:"", vfc:"$401.00", vfr:"$450.00", vfk:""},
+  {fmsi:"1429B", aplicacion:"Mercedes Benz Panorámico (Sobremedida 4.7mm)", vfb:"", vfc:"$440.00", vfr:"", vfk:""},
+  {fmsi:"1429P", aplicacion:"Mercedes Benz Panorámico (Adaptaciones)", vfb:"", vfc:"$377.00", vfr:"$421.00", vfk:""},
+  // Pág 4 de 4
+  {fmsi:"1429AP", aplicacion:"Mercedes (Sobremedida 4.3mm Adaptaciones)", vfb:"", vfc:"$401.00", vfr:"$450.00", vfk:""},
+  {fmsi:"1430-1494", aplicacion:"Mercedes Benz OM904 Reforzado", vfb:"", vfc:"$380.00", vfr:"$445.00", vfk:""},
+  {fmsi:"1430A", aplicacion:"Mercedes Benz OM904 Reforzado (Sobremedida 4.4mm)", vfb:"", vfc:"$456.00", vfr:"", vfk:""},
+  {fmsi:"1431-14099", aplicacion:"Mercedes Benz OM904 Reforzado", vfb:"", vfc:"$387.00", vfr:"$484.00", vfk:""},
+  {fmsi:"1432-14029", aplicacion:"Mercedes Benz OM904 Reforzado", vfb:"", vfc:"$387.00", vfr:"$484.00", vfk:""},
+  {fmsi:"14087", aplicacion:"F-800 diesel Cummins, Kodiak diesel, Caterpillar 3116", vfb:"", vfc:"$476.00", vfr:"$551.00", vfk:""},
+  {fmsi:"1497", aplicacion:"Volkswagen Bus", vfb:"", vfc:"$488.00", vfr:"$565.00", vfk:""},
+  {fmsi:"1497P", aplicacion:"Volkswagen Bus (Adaptaciones)", vfb:"", vfc:"$488.00", vfr:"", vfk:""},
+  {fmsi:"HINO", aplicacion:"Hino Serie 500", vfb:"", vfc:"$521.00", vfr:"$604.00", vfk:""},
+  {fmsi:"1553", aplicacion:"Spicer Kenworth", vfb:"", vfc:"$562.00", vfr:"$643.00", vfk:""},
+  {fmsi:"1555-1559", aplicacion:"Mercedes Benz OM906 Valeo (18)", vfb:"", vfc:"", vfr:"$632.00", vfk:""},
+  {fmsi:"1555L", aplicacion:"Mercedes Benz OM906 Temolite T-250", vfb:"", vfc:"$547.00", vfr:"", vfk:""},
+  {fmsi:"1556", aplicacion:"Mercedes Benz OM906", vfb:"", vfc:"", vfr:"$575.00", vfk:""},
+  {fmsi:"1556A", aplicacion:"Mercedes Benz OM906", vfb:"", vfc:"$503.00", vfr:"$611.00", vfk:""},
+  {fmsi:"1556AP", aplicacion:"Mercedes Benz OM906 (Adaptaciones)", vfb:"", vfc:"", vfr:"$611.00", vfk:""},
+  {fmsi:"1686", aplicacion:"Mercedes Benz OM355/449 Scania en Termolite T-226", vfb:"", vfc:"$542.00", vfr:"", vfk:""},
+  {fmsi:"1694", aplicacion:"Mercedes Benz, Volvo, Scania en Frasle RT-400", vfb:"", vfc:"", vfr:"$530.00", vfk:""},
+  {fmsi:"1694A", aplicacion:"Mercedes Benz, Volvo, Scania", vfb:"", vfc:"$600.00", vfr:"$739.00", vfk:""},
+  {fmsi:"1695", aplicacion:"Mercedes Benz, Volvo, Scania Termolite T-260", vfb:"", vfc:"$635.00", vfr:"", vfk:""},
+];
+
+const taconData = [
+  // Tacones cerametálicos FV (disco embrague)
+  {fmsi:"2V125", claveInt:"FV2V125", descripcion:"Tacón Cerametálico para disco de Embrague FV (VT 2)", precio:"$58.80"},
+  {fmsi:"2V156", claveInt:"FV2V156", descripcion:"Tacón Cerametálico para disco de Embrague FV (VT 5)", precio:"$60.00"},
+  {fmsi:"2V175", claveInt:"FV2V175", descripcion:"Tacón Cerametálico para disco de Embrague FV (VT 7)", precio:"$61.30"},
+  {fmsi:"2V187", claveInt:"FV2V187", descripcion:"Tacón Cerametálico para disco de Embrague FV (VT 8)", precio:"$62.60"},
+  {fmsi:"2D156I", claveInt:"FV2D156I", descripcion:"Tacón Cerametálico para disco de Embrague FV (VTD 5 Izq)", precio:"$78.10"},
+  {fmsi:"2D156D", claveInt:"FV2D156D", descripcion:"Tacón Cerametálico para disco de Embrague FV (VTD 5 Der)", precio:"$78.10"},
+  {fmsi:"2D175I", claveInt:"FV2D175I", descripcion:"Tacón Cerametálico para disco de Embrague FV (VTD 7 Izq)", precio:"$79.00"},
+  {fmsi:"2D175D", claveInt:"FV2D175D", descripcion:"Tacón Cerametálico para disco de Embrague FV (VTD 7 Der)", precio:"$79.00"},
+  {fmsi:"2D187I", claveInt:"FV2D187I", descripcion:"Tacón Cerametálico para disco de Embrague FV (VTD 8 Izq)", precio:"$80.10"},
+  {fmsi:"2D187D", claveInt:"FV2D187D", descripcion:"Tacón Cerametálico para disco de Embrague FV (VTD 8 Der)", precio:"$80.10"},
+  {fmsi:"3V156", claveInt:"FV3V156", descripcion:"Tacón Cerametálico para disco de Embrague FV (VTL 5)", precio:"$67.00"},
+  {fmsi:"3V175", claveInt:"FV3V175", descripcion:"Tacón Cerametálico para disco de Embrague FV (VTL 7)", precio:"$68.80"},
+  {fmsi:"3V187", claveInt:"FV3V187", descripcion:"Tacón Cerametálico para disco de Embrague FV (VTL 8)", precio:"$70.80"},
+  {fmsi:"3HK175", claveInt:"FV3HK175", descripcion:"Tacón Cerametálico para disco de Embrague FV (VTJ 7) Isuzu", precio:"$99.60"},
+  {fmsi:"3HK187", claveInt:"FV3HK187", descripcion:"Tacón Cerametálico para disco de Embrague FV (VTJ 8) Isuzu", precio:"$103.60"},
+  {fmsi:"3HT175", claveInt:"FV3HT175", descripcion:"Tacón Cerametálico para disco de Embrague FV (VTJE 7) Kodiak", precio:"$99.60"},
+  {fmsi:"3HT187", claveInt:"FV3HT187", descripcion:"Tacón Cerametálico para disco de Embrague FV (VTJE 8) Kodiak", precio:"$103.60"},
+  {fmsi:"3D156I", claveInt:"FV3D156I", descripcion:"Tacón Cerametálico para disco de Embrague FV (VTLD 5 Izq)", precio:"$106.80"},
+  {fmsi:"3D156D", claveInt:"FV3D156D", descripcion:"Tacón Cerametálico para disco de Embrague FV (VTLD 5 Der)", precio:"$106.80"},
+  {fmsi:"3D175I", claveInt:"FV3D175I", descripcion:"Tacón Cerametálico para disco de Embrague FV (VTLD 7 Izq)", precio:"$109.40"},
+  {fmsi:"3D175D", claveInt:"FV3D175D", descripcion:"Tacón Cerametálico para disco de Embrague FV (VTLD 7 Der)", precio:"$109.40"},
+  {fmsi:"3D187I", claveInt:"FV3D187", descripcion:"Tacón Cerametálico para disco de Embrague FV (VTLD 8 Izq)", precio:"$112.60"},
+  {fmsi:"3D187D", claveInt:"FV3D187D", descripcion:"Tacón Cerametálico para disco de Embrague FV (VTLD 8 Der)", precio:"$112.60"},
+  {fmsi:"4V156", claveInt:"FV4V156SD", descripcion:"Tacón Cerametálico para disco de Embrague FV (VSR-SD 21)", precio:"$70.60"},
+  {fmsi:"4V175", claveInt:"FV4V175SD", descripcion:"Tacón Cerametálico para disco de Embrague FV (VSR-SD 22)", precio:"$70.80"},
+  {fmsi:"4V187", claveInt:"FV4V187SD", descripcion:"Tacón Cerametálico para disco de Embrague FV (VSR-SD 23)", precio:"$70.90"},
+  // Pasta Tacón
+  {fmsi:"750C", claveInt:"007503", descripcion:"Pasta-Tacón Cerametálico 750C", precio:"$331.70"},
+  {fmsi:"785A", claveInt:"007851", descripcion:"Pasta-Tacón Cerametálico 785A", precio:"$312.50"},
+  {fmsi:"8036T", claveInt:"080368", descripcion:"Pasta-Tacón Cerametálico 8036T", precio:"$379.40"},
+  {fmsi:"8037", claveInt:"080370", descripcion:"Pasta-Tacón Cerametálico 8037", precio:"$393.80"},
+  {fmsi:"8038", claveInt:"080380", descripcion:"Pasta-Tacón Cerametálico 8038", precio:"$395.20"},
+  {fmsi:"8048", claveInt:"080480", descripcion:"Pasta-Tacón Cerametálico 8048", precio:"$347.70"},
+  {fmsi:"8048T", claveInt:"080488", descripcion:"Pasta-Tacón Cerametálico 8048T", precio:"$388.90"},
+  {fmsi:"831", claveInt:"008310", descripcion:"Pasta-Tacón Cerametálico 831", precio:"$358.20"},
+  {fmsi:"8805", claveInt:"088050", descripcion:"Pasta-Tacón Cerametálico 8805", precio:"$398.40"},
+  {fmsi:"9040", claveInt:"090400", descripcion:"Pasta-Tacón Cerametálico 9040", precio:"$434.90"},
+  {fmsi:"9040U", claveInt:"090407", descripcion:"Pasta-Tacón Cerametálico 9040U", precio:"$430.10"},
+  {fmsi:"9051", claveInt:"090510", descripcion:"Pasta-Tacón Cerametálico 9051", precio:"$452.40"},
+  {fmsi:"909E", claveInt:"009095", descripcion:"Pasta-Tacón Cerametálico 909E", precio:"$408.80"},
+  {fmsi:"1025", claveInt:"010250", descripcion:"Pasta-Tacón Cerametálico 1025", precio:"$312.50"},
+  // Pag 2 (Vafri Ceramic)
+  {fmsi:"11004", claveInt:"110040", descripcion:"Pasta-Tacón Cerametálico 11004", precio:"$623.30"},
+  {fmsi:"11048", claveInt:"110480", descripcion:"Pasta-Tacón Cerametálico 11048", precio:"$658.40"},
+  {fmsi:"11078", claveInt:"110780", descripcion:"Pasta-Tacón Cerametálico 11078", precio:"$680.90"},
+  {fmsi:"1166A", claveInt:"011661", descripcion:"Pasta-Tacón Cerametálico 1166A", precio:"$605.50"},
+  {fmsi:"1169", claveInt:"011690", descripcion:"Pasta-Tacón Cerametálico 1169", precio:"$597.40"},
+  {fmsi:"1188", claveInt:"011880", descripcion:"Pasta-Tacón Cerametálico 1188", precio:"$561.50"},
+  {fmsi:"13004", claveInt:"130040", descripcion:"Pasta-Tacón Cerametálico 13004", precio:"$694.00"},
+];
+
+const balatasData = [
+  {clave:"BC18979125", fmsi:"D1897-9125", posicion:"Delantera", descripcion:"Audi A4 17-22, A6 16-20", precio:"$955.00"},
+  {clave:"BCCX404", fmsi:"CX404", posicion:"Delantera", descripcion:"BYD Dolphin EV, Seal 05 DM-i, KingDM-i", precio:"$358.00"},
+  {clave:"BCCX354", fmsi:"CX354", posicion:"Trasera", descripcion:"BYD Dolphin EV, Seal 05 DM-i, KingDM-i y Song", precio:"$293.00"},
+  {clave:"BCCX319", fmsi:"CX319", posicion:"Delantera", descripcion:"BYD Song Plus DM-i Big Caliper (adelante) 20-…", precio:"$360.00"},
+  {clave:"BCCX412", fmsi:"CX412", posicion:"Delantera", descripcion:"BYD Song Plus DM-i Small Caliper (Del) 20- Song Pro (Tra)", precio:"$392.00"},
+  {clave:"BCB1928", fmsi:"FDB1928", posicion:"Delantera", descripcion:"BYD Song Pro", precio:"$483.00"},
+  {clave:"BCD15558767", fmsi:"D1555-8767", posicion:"Delantera", descripcion:"BYD Song Pro", precio:"$405.00"},
+  {clave:"BC10357779", fmsi:"D1035-7779", posicion:"Delantera", descripcion:"Chevrolet Aveo 1.6l 06-17", precio:"$295.00"},
+  {clave:"BC596785Y", fmsi:"F596-785Y", posicion:"Delantera", descripcion:"Chevrolet Aveo 23-25", precio:"$385.00"},
+  {clave:"BC19429167", fmsi:"D1942-9167", posicion:"Delantera", descripcion:"Chevrolet Aveo Ng 18-21", precio:"$310.00"},
+  {clave:"BC15908801", fmsi:"D1590-8801", posicion:"Delantera", descripcion:"Chevrolet Beat 17-21, Spark 12-17", precio:"$320.00"},
+  {clave:"BCD12648381", fmsi:"D1264-8381", posicion:"Delantera", descripcion:"Chevrolet Captiva 08-15, Equinox 07-09", precio:"$383.00"},
+  {clave:"BC1941CX257", fmsi:"D1941 CX257", posicion:"Delantera", descripcion:"Chevrolet Captiva 22-23", precio:"$367.00"},
+  {clave:"BC6887563", fmsi:"D688-7563", posicion:"Delantera", descripcion:"Chevrolet Chevy C1 C2 y C3 94-12", precio:"$225.00"},
+  {clave:"BC11698282", fmsi:"D1169-8282", posicion:"Delantera", descripcion:"Chevrolet Colorado 09-12, Canyon 09-12", precio:"$385.00"},
+  {clave:"BC15228730", fmsi:"D1522-8730", posicion:"Delantera", descripcion:"Chevrolet Cruze 10-14", precio:"$330.00"},
+  {clave:"BC14218536", fmsi:"D1421-8536", posicion:"Delantera", descripcion:"Chevrolet Equinox 10-15, GMC Terrain 10-17, Malibu", precio:"$330.00"},
+  {clave:"BC19139144", fmsi:"D1913-9144", posicion:"Delantera", descripcion:"Chevrolet Malibu 16-20, GMC Terrain 18-20", precio:"$330.00"},
+  {clave:"BC23859611", fmsi:"D2385-9611", posicion:"Delantera", descripcion:"Chevrolet Onix 20-22, Tracker 19-21, Virtus Nvo 22-24 (corta)", precio:"$325.00"},
+  {clave:"BC16778906", fmsi:"D1677-8906", posicion:"Delantera", descripcion:"Chevrolet S10 13-14, Colorado 16 y Nissan X-Trail 14", precio:"$335.00"},
+  {clave:"BC12978414", fmsi:"D1297-8414", posicion:"Trasera", descripcion:"Chevrolet S10 Max 23-24, Hyundai Santa fe 07-09", precio:"$263.00"},
+  {clave:"BC7927700", fmsi:"D792-7700", posicion:"Trasera", descripcion:"Chevrolet Silverado 03-06 SS, Astro 03-05 Cheyenne 00-04", precio:"$315.00"},
+  {clave:"BC17028926", fmsi:"D1702-8926", posicion:"Delantera", descripcion:"Chevrolet Sonic 11-17", precio:"$330.00"},
+  {clave:"BC13638472", fmsi:"D1363-8472", posicion:"Delantera", descripcion:"Chevrolet Suburban, Avalanche, Cheyene, Express 1500", precio:"$435.00"},
+  {clave:"BC10927997", fmsi:"D1092-7997", posicion:"Delantera", descripcion:"Chevrolet Suburban, Silverado, Avalanche Sierra 05-07", precio:"$415.00"},
+  {clave:"BC1176-8290", fmsi:"D1176-8290", posicion:"Delantera", descripcion:"Chevrolet Tornado 04-12, Corsa 02-08", precio:"$255.00"},
+  {clave:"BC3697259", fmsi:"D369-7259", posicion:"Delantera", descripcion:"Chrevolet Silverado 95-99, Suburban, Tahoe, Blazer", precio:"$370.00"},
+  {clave:"BC6587438", fmsi:"D658-7438", posicion:"Trasera", descripcion:"Chrysler 300M 99-04, PT Cruiser 04-09, Concorde 95-04", precio:"$305.00"},
+  {clave:"BC8577733", fmsi:"D857-7733", posicion:"Delantera", descripcion:"Chrysler Stratus, Voyager, Town & Country Caravan 05-07", precio:"$410.00"},
+  {clave:"BC15898800", fmsi:"D1589-8800", posicion:"Delantera", descripcion:"Chrysler Town and Country 13-14, 15-16, Pacifica 16-20", precio:"$430.00"},
+  {clave:"BC11568266", fmsi:"D1156-8266", posicion:"Delantera", descripcion:"Dodge Attitude 06-11", precio:"$300.00"},
+  {clave:"BC17318956", fmsi:"D1731-8956", posicion:"Delantera", descripcion:"Dodge Attitude 15-19, Mitsubishi Mirage G4 17-18", precio:"$365.00"},
+  {clave:"BC8667741", fmsi:"D866-7741", posicion:"Delantera", descripcion:"Dodge Avenger 08-14, Caliber 08-12, Lancer 04-16, Eclipse", precio:"$305.00"},
+  {clave:"BC10847991", fmsi:"D1084-7991", posicion:"Delantera", descripcion:"Dodge Dakota 05-12, Ram 1500 07-11", precio:"$400.00"},
+  {clave:"BC97519751C", fmsi:"D2519-9751", posicion:"Trasera", descripcion:"Dodge Journey 23-…", precio:"$210.00"},
+  {clave:"BC12738389", fmsi:"D1273-8389", posicion:"Delantera", descripcion:"Dodge Nitro, Liberty, Wrangler", precio:"$360.00"},
+  {clave:"BC15688747", fmsi:"D1538-8747", posicion:"Delantera", descripcion:"Dodge Ram 700, Vision, Fiat Strada, Palio (D1568-4777)", precio:"$350.00"},
+  {clave:"BC24679693", fmsi:"D2467-9693", posicion:"Trasera", descripcion:"Dodge Ram Promaster 2500 22-23", precio:"$460.00"},
+  {clave:"BCD1906-913", fmsi:"D1906-9135", posicion:"Delantera", descripcion:"Dodge Vision 15-17, Ram Promaster Rapid 17-18", precio:"$330.00"},
+  {clave:"BC15368745", fmsi:"D1536-8745", posicion:"Delantera", descripcion:"Fiat Bravo 09-10, Linea 10-14, Stilo 06-07", precio:"$375.00"},
+  {clave:"BC507013A", fmsi:"D50-7013A", posicion:"Delantera", descripcion:"Ford Bronco 76-86, F100 70-80, F150 76-85", precio:"$340.00"},
+  {clave:"BC6327503", fmsi:"D632-7503", posicion:"Delantera", descripcion:"Ford E-150 94-02, F150 94-96, Bronco 94-96", precio:"$390.00"},
+  {clave:"BC11758289", fmsi:"D1175-8289", posicion:"Delantera", descripcion:"Ford Ecosport 04-10, Fiesta Ikon 13-15", precio:"$330.00"},
+  {clave:"BC10477950", fmsi:"D1047-7950", posicion:"Delantera", descripcion:"Ford Escape 08-12, Escape Hybrid 08-12, Mariner 05-11", precio:"$377.00"},
+  {clave:"BC10447947", fmsi:"D1044-7947", posicion:"Delantera", descripcion:"Ford Escape, Ecosport, Mazda 3 (04-13), Focus", precio:"$355.00"},
+  {clave:"BC6527532", fmsi:"D652-7532", posicion:"Delantera", descripcion:"Ford Explorer 95 - 01, Ranger", precio:"$350.00"},
+  {clave:"BC8797584", fmsi:"D879-7584", posicion:"Trasera", descripcion:"Ford F-150 XLT", precio:"$310.00"},
+  {clave:"BC14548653", fmsi:"D1454-8653", posicion:"Delantera", descripcion:"Ford Figo, Fiesta 16-19", precio:"$275.00"},
+  {clave:"BC17939022", fmsi:"D1793-9022", posicion:"Trasera", descripcion:"Ford Mustang 15-19", precio:"$295.00"},
+  {clave:"BC2497125", fmsi:"D249-7125", posicion:"Delantera", descripcion:"Ford Ranger 83-94, Explorer 91-94, Bronco 85-97", precio:"$400.00"},
+  {clave:"BC3877125A", fmsi:"D387-7125A", posicion:"Delantera", descripcion:"Ford Ranger 88-94, Explorer 95-01, Aerostar 90-93", precio:"$400.00"},
+  {clave:"BCD2505", fmsi:"D2505", posicion:"Delantera", descripcion:"Ford Territory 23-25", precio:"$575.00"},
+  {clave:"BC25749805", fmsi:"D2574-9805", posicion:"Trasera", descripcion:"Ford Territory 23-25", precio:"$230.00"},
+  {clave:"BC17749004", fmsi:"D1774-9004", posicion:"Delantera", descripcion:"Ford Transit 14-17", precio:"$520.00"},
+  {clave:"BC17759005", fmsi:"D1775-9005", posicion:"Trasera", descripcion:"Ford Transit 15-17", precio:"$330.00"},
+  {clave:"BC7927662", fmsi:"D792-7662", posicion:"Trasera", descripcion:"GMC Sierra 1500 01-07, Chevrolet Silverado 1500 99-06", precio:"$315.00"},
+  {clave:"BC13368447", fmsi:"D1336-8447", posicion:"Trasera", descripcion:"Honda Accord 08-12, Acura TSX 10", precio:"$250.00"},
+  {clave:"BC13948502", fmsi:"D1394-8502", posicion:"Delantera", descripcion:"Honda City 14-22, Fit 09-20", precio:"$325.00"},
+  {clave:"BC465A7573", fmsi:"D465A-7573", posicion:"Delantera", descripcion:"Honda Civic, Accord", precio:"$325.00"},
+  {clave:"BC9147795", fmsi:"D914-7795", posicion:"Delantera", descripcion:"Honda CR-V 02-06, Accord 03-06, Elemnt 03-03", precio:"$365.00"},
+  {clave:"BC10867418", fmsi:"D1086-7418", posicion:"Trasera", descripcion:"Honda CR-V 05-14, Acura RDX 13-18", precio:"$250.00"},
+  {clave:"BC10897994", fmsi:"D1089-7994", posicion:"Delantera", descripcion:"Honda CR-V 07-16, Odissey 05-15, Crosstour 05-11, RDX 07-09", precio:"$370.00"},
+  {clave:"BC20368840", fmsi:"D2036-8840", posicion:"Delantera", descripcion:"Honda CR-V 17-19", precio:"$390.00"},
+  {clave:"BC16548883", fmsi:"D1654-8883", posicion:"Delantera", descripcion:"Honda HR-V 16-17, Accord 13-15 y EX 16", precio:"$335.00"},
+  {clave:"BC18419069Z", fmsi:"D1841-9069-Z", posicion:"Delantera", descripcion:"Honda HR-V 16-19", precio:"$260.00"},
+  {clave:"BC15217994", fmsi:"D1521-7994", posicion:"Delantera", descripcion:"Honda Odyssey 05-10", precio:"$360.00"},
+  {clave:"BCD1815-904", fmsi:"D1815-9049", posicion:"Delantera", descripcion:"Hyundai Creta 18-19, Santa FE 18, KIA Sorento 18-19", precio:"$350.00"},
+  {clave:"BC14328549", fmsi:"D1432-8549", posicion:"Delantera", descripcion:"Hyundai Creta 18 1.6L", precio:"$345.00"},
+  {clave:"BC15438751", fmsi:"D1543-8751", posicion:"Delantera", descripcion:"Hyundai Elantra Coupe 13, Dodge Attitude 12-13", precio:"$325.00"},
+  {clave:"BC19359159", fmsi:"D1935-9159", posicion:"Delantera", descripcion:"Hyundai Gran i10 16-21", precio:"$310.00"},
+  {clave:"BC12958614", fmsi:"D1295-8614", posicion:"Delantera", descripcion:"Hyundai Optima 15-18, Soul 15-16, Kia Sportage 15-16", precio:"$345.00"},
+  {clave:"BC25129744", fmsi:"D2512-9744", posicion:"Trasera", descripcion:"Hyundai Tucson 21-25", precio:"$275.00"},
+  {clave:"BCCX176", fmsi:"CX176", posicion:"Delantera", descripcion:"Jac Star y Sunrise", precio:"$300.00"},
+  {clave:"BC10957478", fmsi:"D1095-7478", posicion:"Trasera", descripcion:"Jac XKR, XJR, XJ8, XJ, XF, Mazda 5, Focus", precio:"$245.00"},
+  {clave:"BC8668338", fmsi:"D866-8338", posicion:"Delantera", descripcion:"Jeep Compass 07-08, dodge Caliber 07", precio:"$305.00"},
+  {clave:"BC8567732", fmsi:"D856-7732", posicion:"Delantera", descripcion:"Jeep Liberty 02-07, Chrysler T&C 01-07, Grand Voyager 01-02", precio:"$325.00"},
+  {clave:"BC1811-9046", fmsi:"D1811-9046", posicion:"Delantera", descripcion:"Jeep Renegade 17-19, Compass 18-19, Fiat 500 16", precio:"$400.00"},
+  {clave:"BC18124415", fmsi:"D1812-4415", posicion:"Trasera", descripcion:"Kia Elantra, Sportage, Optima", precio:"$280.00"},
+  {clave:"BC15948428", fmsi:"D1594-8428", posicion:"Trasera", descripcion:"Kia K4 25-…", precio:"$252.00"},
+  {clave:"BC24009629", fmsi:"D2400-9629", posicion:"Delantera", descripcion:"Kia K4 25-…", precio:"$375.00"},
+  {clave:"BC18298506", fmsi:"D1829-8506", posicion:"Trasera", descripcion:"Kia Optima, Hyundai Sonata, Tucson", precio:"$280.00"},
+  {clave:"BC15448428", fmsi:"D1544-8428", posicion:"Trasera", descripcion:"Kia Rio 18-22", precio:"$240.00"},
+  {clave:"BC15938806", fmsi:"D1593-8806", posicion:"Delantera", descripcion:"Kia Rio 18-24", precio:"$320.00"},
+  {clave:"BC13978505", fmsi:"D1397-8505", posicion:"Delantera", descripcion:"Kia Seltos 20-21, Forte 19-20", precio:"$315.00"},
+  {clave:"BC18558614", fmsi:"D1855-8614", posicion:"Delantera", descripcion:"Kia Seltos 20-22, Optima 15-22, Hyundai Sonata 15-22", precio:"$350.00"},
+  {clave:"BC23739631", fmsi:"D2373-9631", posicion:"Trasera", descripcion:"Kia Seltos, Hyundai Elantra", precio:"$255.00"},
+  {clave:"BC18169051", fmsi:"D1816-9051", posicion:"Trasera", descripcion:"Kia Sorento 15-20, Santa Fe 18, Stinger 18-22", precio:"$280.00"},
+  {clave:"BC18479075", fmsi:"D1847-9075", posicion:"Delantera", descripcion:"Kia Sportage, Hyundai Tucson, Yukon 09-16", precio:"$355.00"},
+  {clave:"BC18529081", fmsi:"D1852-9081", posicion:"Delantera", descripcion:"Mazda 2 16-24, Toyota Yaris 1.5 16-19 Yaris R 16-20", precio:"$299.00"},
+  {clave:"BC16798908", fmsi:"D1679-8908", posicion:"Trasera", descripcion:"Mazda 3 14-16 Outlander 13-16", precio:"$280.00"},
+  {clave:"BC22189458", fmsi:"D2218-9458", posicion:"Delantera", descripcion:"Mazda 3 CX-30 20-23 (nuevo diseño)", precio:"$340.00"},
+  {clave:"BC17288952", fmsi:"D1728-8952", posicion:"Delantera", descripcion:"Mazda CX-3 16-19, Mazda 3 15-18", precio:"$333.00"},
+  {clave:"BC16248837", fmsi:"D1624-8837", posicion:"Trasera", descripcion:"Mazda CX3 16-20 CX5 13-20", precio:"$280.00"},
+  {clave:"BC16238836", fmsi:"D1623-8836", posicion:"Delantera", descripcion:"Mazda CX5 14-18 Nissan Sentra Rouge", precio:"$350.00"},
+  {clave:"BC12588377", fmsi:"D1258-8377", posicion:"Delantera", descripcion:"Mazda CX-7 07-12, CX-9 07-17, Ford Edge 07-17, MKX", precio:"$345.00"},
+  {clave:"BC12688383", fmsi:"D1268-8383", posicion:"Delantera", descripcion:"Mercedes Sprinter 07-16 Crafter 08-18", precio:"$485.00"},
+  {clave:"BC13168430", fmsi:"D1316-8430", posicion:"Delantera", descripcion:"Mercedes Sprinter 07-16 Crafter 08-18, Amarok 10-11", precio:"$420.00"},
+  {clave:"BC768MG7860", fmsi:"D768MG-7860", posicion:"Delantera", descripcion:"MG5 21-23", precio:"$330.00"},
+  {clave:"BC15198728", fmsi:"D1519-8728", posicion:"Delantera", descripcion:"Mitsubishi L200 08-20, Montero Sport 09-12", precio:"$340.00"},
+  {clave:"BC3337228", fmsi:"D333-7228", posicion:"Delantera", descripcion:"Nissan D21, estaquitas, Urvan, NP 300 08-14", precio:"$330.00"},
+  {clave:"BC2657170", fmsi:"D265-7170", posicion:"Delantera", descripcion:"Nissan Estaquitas 87-94", precio:"$355.00"},
+  {clave:"BC19119141", fmsi:"D1911-9141", posicion:"Delantera", descripcion:"Nissan Frontier 16-20, NP300", precio:"$395.00"},
+  {clave:"BC20389269", fmsi:"D2038-9269", posicion:"Delantera", descripcion:"Nissan Kicks 17-19, Versa S 1.6l 20-23", precio:"$300.00"},
+  {clave:"BC11918310", fmsi:"D1191-8310", posicion:"Delantera", descripcion:"Nissan NV350 Urvan 14-20, 02-18", precio:"$385.00"},
+  {clave:"BC11468256", fmsi:"D1146-8256", posicion:"Delantera", descripcion:"Nissan Platina 02-11, Renault Clio 01-09, Sandero 10-12", precio:"$280.00"},
+  {clave:"BC8157318", fmsi:"D815-7318", posicion:"Delantera", descripcion:"Nissan Sentra 07 14-18", precio:"$310.00"},
+  {clave:"BC23109545Z", fmsi:"D2310-9545Z", posicion:"Delantera", descripcion:"Nissan Sentra 2.0 20-23", precio:"$330.00"},
+  {clave:"BC10607842", fmsi:"D1060-7842", posicion:"Delantera", descripcion:"Nissan Sentra 20-22", precio:"$310.00"},
+  {clave:"BC23069541", fmsi:"D2306-9541", posicion:"Delantera", descripcion:"Nissan Sentra 20-23", precio:"$277.00"},
+  {clave:"BC13458456", fmsi:"D1345-8456", posicion:"Delantera", descripcion:"Nissan Tiida 07-18", precio:"$295.00"},
+  {clave:"BC5107389", fmsi:"D510-7389", posicion:"Delantera", descripcion:"Nissan Tsuru III 92-17", precio:"$225.00"},
+  {clave:"BC15928804", fmsi:"D1592-8804", posicion:"Delantera", descripcion:"Nissan Versa 12-18, V drive 20-21", precio:"$275.00"},
+  {clave:"BC8307703", fmsi:"D830-7703", posicion:"Delantera", descripcion:"Nissan Xterra 00-04 y Frontier 00-01", precio:"$350.00"},
+  {clave:"BC9057784", fmsi:"D905-7784", posicion:"Trasera", descripcion:"Nissan Xtrail 02-11, Altima 02-08, Suzuki Grand Vitara", precio:"$208.00"},
+  {clave:"BC12888405", fmsi:"D1288-8405", posicion:"Trasera", descripcion:"Nissan Xtrail, Murano 05-19, Rouge 08-14, Juke 14-18", precio:"$230.00"},
+  {clave:"BC16278844", fmsi:"D1627-8844", posicion:"Delantera", descripcion:"Renault Fluenc 11-14, Duste 13-17, Capture 18-19, Oroch 18-23", precio:"$375.00"},
+  {clave:"BCCAP818", fmsi:"CAP-818", posicion:"Delantera", descripcion:"Renault Kwid 19-25", precio:"$305.00"},
+  {clave:"BC11938311", fmsi:"D1193-8311", posicion:"Delantera", descripcion:"Renault Scala 10-13", precio:"$290.00"},
+  {clave:"BC19689193", fmsi:"D1968-9193", posicion:"Del. Sin sensor", descripcion:"Seat Ibiza 17-19, Arona 19, Audi A1, A3 15-17", precio:"$406.00"},
+  {clave:"BC16149054", fmsi:"D1614-9054", posicion:"Delantera", descripcion:"Suzuki Swift 09-17", precio:"$275.00"},
+  {clave:"BC20079237", fmsi:"D2007-9237", posicion:"Trasera", descripcion:"Suzuki Swift GLX, Sport 13-20, Vitara (nueva) 16-20", precio:"$230.00"},
+  {clave:"BC20969331", fmsi:"D2096-9331", posicion:"Delantera", descripcion:"Suzuki Vitara 16-19, S-Cross 14-20 y Xpander Cross 22-24", precio:"$328.00"},
+  {clave:"BC14718671", fmsi:"D1471-8671", posicion:"Delantera", descripcion:"Toyota Avanza 1.5l 07-21", precio:"$275.00"},
+  {clave:"BC24799707", fmsi:"D2479-9707", posicion:"Delantera", descripcion:"Toyota Avanza 22-24, Raize 22-24", precio:"$334.00"},
+  {clave:"BC12128332", fmsi:"D1212-8332", posicion:"Trasera", descripcion:"Toyota Camry 07-20 y Rav 4 14-17", precio:"$222.00"},
+  {clave:"BC20769311", fmsi:"D2076-9311", posicion:"Delantera", descripcion:"Toyota Camry 18-20, Rav-4 19-20, C-HR, Cross 22", precio:"$333.00"},
+  {clave:"BC12108330", fmsi:"D1210-8330", posicion:"Delantera", descripcion:"Toyota Corolla 09-17, Rav4 06-10", precio:"$310.00"},
+  {clave:"BC13248436", fmsi:"D1324-8436", posicion:"Delantera", descripcion:"Toyota Highlander 8-13, Sienna 08-15", precio:"$370.00"},
+  {clave:"BC15678776", fmsi:"D1567-8776", posicion:"Delantera", descripcion:"Toyota Hilux 05-14", precio:"$370.00"},
+  {clave:"BC20069236", fmsi:"D2006-9236", posicion:"Delantera", descripcion:"Toyota Hilux L4 2.8l 18-22", precio:"$338.00"},
+  {clave:"BC12118331", fmsi:"D1211-8331", posicion:"Delantera", descripcion:"Toyota Rav-4 06-17, Corolla 09-13, Hilux 09-12", precio:"$315.00"},
+  {clave:"BC12228331", fmsi:"D1222-8331", posicion:"Delantera", descripcion:"Toyota Rav-4 6 cil 06-17, Hilux 09-12, Corolla 09", precio:"$345.00"},
+  {clave:"BC23059540", fmsi:"D2305-9540", posicion:"Delantera", descripcion:"Toyota Sienna, Corolla, Highlander, Rav-4", precio:"$290.00"},
+  {clave:"BC9767877", fmsi:"D976-7877", posicion:"Delantera", descripcion:"Toyota Tacoma 06-18, Tundra 03-07, Jac Frison", precio:"$395.00"},
+  {clave:"BC831-7704", fmsi:"D831-7704", posicion:"Delantera", descripcion:"Toyota Yaris 04-11", precio:"$227.00"},
+  {clave:"BC19509175", fmsi:"D1950-9175", posicion:"Delantera", descripcion:"Toyota Yaris 17-19", precio:"$280.00"},
+  {clave:"BC11078212", fmsi:"D1107-8212", posicion:"Delantera", descripcion:"VW Bora 05-10, Audi A1 11-18, A3 04-08", precio:"$385.00"},
+  {clave:"BC16418868", fmsi:"D1641-8868", posicion:"Delantera", descripcion:"VW Gol 12-18, Saveiro 12-17, Pointer 98-10", precio:"$340.00"},
+  {clave:"BC17799008", fmsi:"D1779-9008", posicion:"Trasera", descripcion:"VW Golf 15-16, GTI 15-16, Passat 15-16, A3 15-16", precio:"$276.00"},
+  {clave:"BC227-7177Z", fmsi:"D227-7177Z", posicion:"Delantera", descripcion:"VW Golf Jetta A3 Derby Dodge Ram Van 21-23", precio:"$330.00"},
+  {clave:"BC768A7635", fmsi:"D768A-7635", posicion:"Delantera", descripcion:"VW Jetta 11-18, Lupo 05-10, con sensor", precio:"$350.00"},
+  {clave:"BC7687860", fmsi:"D768-7860", posicion:"Delantera", descripcion:"VW Jetta 11-18, Lupo 05-10, Crossfox 07-17, Polo Base", precio:"$330.00"},
+  {clave:"BC1760A8989", fmsi:"D1760A-8989", posicion:"Del. C/sensor", descripcion:"VW Jetta 19-19, Golf 13-18, Audi A3 15-18, Seat Leon 13-18", precio:"$420.00"},
+  {clave:"BC17618990", fmsi:"D1761-8990", posicion:"Trasera", descripcion:"VW Jetta 19-19, Golf 13-18, Seat Leon 13-18, Audi A3 15-18", precio:"$280.00"},
+  {clave:"BC3407234", fmsi:"D340-7234", posicion:"Trasera", descripcion:"VW Jetta 89-10, Polo 13-14, A1 14-18 A4 98-05, Peugeot 207", precio:"$230.00"},
+  {clave:"BC2807183", fmsi:"D280-7183", posicion:"Delantera", descripcion:"VW Jetta A2 90-91 A2 Disco Vent.", precio:"$250.00"},
+  {clave:"BC14568656", fmsi:"D1456-8656", posicion:"Trasera", descripcion:"VW Jetta A6 11-13, Jetta Clasico 10-14, Bora 10-11", precio:"$250.00"},
+  {clave:"BC1107A8212", fmsi:"D1107A-8212", posicion:"Del. C/sensor", descripcion:"VW Jetta MK6 2.5lts, Bora 06-10, Audi A1 11-17", precio:"$370.00"},
+  {clave:"BC16338849", fmsi:"D1633-8849", posicion:"Delantera", descripcion:"VW JettaR 15-16, Tiguan 17-22, Golf R A6, Seat Ateca 19-20", precio:"$495.00"},
+  {clave:"BC11738284", fmsi:"D1173-8284", posicion:"Delantera", descripcion:"VW Pointer 99-09, Pick up 99-10, Chev Chevy Pick up 99-03", precio:"$322.00"},
+  {clave:"BC17608989", fmsi:"D1760-8989", posicion:"Delantera", descripcion:"VW Taos 21-24, VW Jetta MK4", precio:"$435.00"},
+  {clave:"BC25609791", fmsi:"D2560-9791", posicion:"Delantera", descripcion:"VW Tiguan 23-24 Virtus", precio:"$400.00"},
+  {clave:"BC17769006", fmsi:"D1776-9006", posicion:"Delantera", descripcion:"VW Vento 18-22", precio:"$300.00"},
+];
+
+const kitClutchData = [
+  {clave:"VC618064001", ref:"618064017", descripcion:"Nissan 210 79-82, 310 82, Hikari 88-92, Tsuru 84-91", precio:"$1,270.00"},
+  {clave:"VC619084601", ref:"619084667", descripcion:"Tsuru III 92-17, Nissan 200SX 95-96, Sentra 86-00, NAK06040", precio:"$1,175.00"},
+  {clave:"VC619234002", ref:"619234000", descripcion:"Chevrolet Chevy 1.4L 94-12", precio:"$1,020.00"},
+  {clave:"VC619234001", ref:"619234000", descripcion:"Chevrolet Chevy 1.4L 94-12", precio:"$1,020.00"},
+  {clave:"VC619242802", ref:"619242833", descripcion:"Ford Ikon 1.6L 01-10", precio:"$2,111.00"},
+  {clave:"VC619305601", ref:"619305600", descripcion:"Beat 18-21, Matiz 11-15, Spark 11-15,16-17; Matiz 04-10", precio:"$1,245.00"},
+  {clave:"VC619319501", ref:"619319500", descripcion:"Dodge Attitude 15-23; Mirage 15-20, Mirage G4 19-24", precio:"$1,190.00"},
+  {clave:"VC620063803", ref:"620063869", descripcion:"Nissan 200SX, Datsun, Datsun Pick up L4 1.6L", precio:"$1,357.20"},
+  {clave:"VC620217502", ref:"620217500", descripcion:"Chevrolet Tornado 12-20, Chevy Pickup 99-03.", precio:"$1,175.00"},
+  {clave:"VC620217501", ref:"620217500", descripcion:"Chevrolet Tornado 12-20, Chevy Pickup 99-03.", precio:"$1,240.00"},
+  {clave:"VC620308901", ref:"620308900", descripcion:"Platina 02-10; Clio 02-10, Kangoo 07-09, Aprio 08-10", precio:"$1,270.00"},
+  {clave:"VC620309102", ref:"620309100", descripcion:"VW Gol 09-20, Crossfox 07-09 07-15, Polo 03-07, Sav 10-23", precio:"$1,340.00"},
+  {clave:"VC620332801", ref:"620332833", descripcion:"Ford Courier 11-12, Fiesta 01/03-10", precio:"$1,825.00"},
+  {clave:"VC620283401", ref:"620332834", descripcion:"Ford Ikon L4 1.5L 03-07; KA 01-07, Courier 01-10, EJ-F19A.", precio:"$1,825.00"},
+  {clave:"VC621207801", ref:"621207800", descripcion:"Volkswagen Corsar 84-88, Pointer 98-09, Pointer Truck 98-10", precio:"$1,425.00"},
+  {clave:"VC621242401", ref:"621242433", descripcion:"Chevrolet Corsa 03-08, Meriva 04-06, Tornado 04-12, Astra", precio:"$1,885.10"},
+  {clave:"VC621303101", ref:"621303100", descripcion:"Dodge Attitude 06-11, Verna 04-06", precio:"$1,460.00"},
+  {clave:"VC622173003", ref:"622173060", descripcion:"Nissan Sentra L4 1.8L 00-06; 2.0L 96-01; Tsuru GSR2000", precio:"$1,413.80"},
+  {clave:"VC622240001", ref:"622240000", descripcion:"VW Jetta Clasico 99-11-15, Golf 00-07, Ibiza 01-02", precio:"$1,315.00"},
+  {clave:"VC622308101", ref:"622308133", descripcion:"Ford EcoSport 04-12, Focus 05-08", precio:"$2,000.00"},
+  {clave:"VC622308902", ref:"622308900", descripcion:"VW Polo 03-07, SEAT Ibiza Cordoba 03-15", precio:"$1,690.00"},
+  {clave:"VC622314901", ref:"622314900", descripcion:"Chevrolet Aveo 08-18; Pontiac G3 07-09", precio:"$1,590.00"},
+  {clave:"VC622331102", ref:"622331133", descripcion:"March 12-23, Tiida 13-18, V-Drive 20-22, Versa 12-20", precio:"$1,885.00"},
+  {clave:"VC622331101", ref:"622331133", descripcion:"March 12-23, Tiida 13-18, V-Drive 20-22, Versa 12-20", precio:"$2,040.00"},
+  {clave:"VC622334302", ref:"622334300", descripcion:"VW Vento 1.6L 14-22", precio:"$1,690.00"},
+  {clave:"VC622334701", ref:"622334733", descripcion:"Ram 700, Fiat Strada", precio:"$2,445.00"},
+  {clave:"VC623057803", ref:"623057860", descripcion:"KIT PICK-UP 4 CIL", precio:"$1,600.00"},
+  {clave:"VC623070502", ref:"623070500", descripcion:"Chevrolet S-10 Blazer L4 2.0L, ISUZU RODEO V6 3.1L", precio:"$1,817.00"},
+  {clave:"VC623070503", ref:"623070500", descripcion:"Chevrolet S-10 Blazer L4 2.0L, ISUZU RODEO V6 3.1L", precio:"$1,817.00"},
+  {clave:"VC623214103", ref:"623214100", descripcion:"GMC Blazer V6, 3.1L 1995, 5 VEL", precio:"$1,836.00"},
+  {clave:"VC623239803", ref:"623239860", descripcion:"Mazda B L4 2.2L 87-93", precio:"$1,600.00"},
+  {clave:"VC623286402", ref:"623286400", descripcion:"Toyota Hilux 91-94, EJ-TY23H", precio:"$1,815.00"},
+  {clave:"VC623286401", ref:"623286460", descripcion:"Toyota Hilux 91-94, EJ-TY23H", precio:"$1,815.00"},
+  {clave:"VC623288701", ref:"623288700", descripcion:"Ford Ranger L4 2.3L 88-92, EJ-F23P", precio:"$3,185.00"},
+  {clave:"VC623340601", ref:"623340633", descripcion:"Nissan Sentra 07-19, Tiida 07-18", precio:"$2,075.00"},
+  {clave:"VC624277501", ref:"624277500", descripcion:"Nissan 2.4L 93-10, D21 NP300 09-15, Urvan 00-08.", precio:"$1,685.00"},
+  {clave:"VC624284503", ref:"624284560", descripcion:"Nissan Ichi Van, Pathfinder Pick UP L4 2.4L", precio:"$1,920.00"},
+  {clave:"VC625230601", ref:"625230600", descripcion:"Nissan Pathfinder 3.0l 86/95 3.3l 96 Pick Up 3.0l", precio:"$2,145.00"},
+  {clave:"VC625301001", ref:"625301060", descripcion:"Toyota Hiace L4 06-15, Hilux 04-16, Tacoma 01-04", precio:"$2,165.00"},
+  {clave:"VC628073203", ref:"628073200", descripcion:"Ford Custom, MICRO,F150, F250, F350 V8, 5.0L.", precio:"$2,706.00"},
+  {clave:"VC630174303", ref:"630174300", descripcion:"Dodge Ram1500 5.2L Ram 2500 94-00 V8 5.9L", precio:"$2,978.00"},
+];
+
+// ============================================================
+// DATA — Collarín Hidráulico (Vafri Ceramic)
+// ============================================================
+const colHidData = [
+  {clave:"CH619242802", ref:"CH619242802", descripcion:"Collarín hidráulico para Ford Ikon 1.6L", precio:"$605.00"},
+  {clave:"CH620332801", ref:"CH620332801", descripcion:"Collarín hidráulico para Courrier y fiesta.", precio:"$605.00"},
+  {clave:"CH620342801", ref:"CH620342801", descripcion:"Collarín hidráulico (con pipeta) para courrier y fiesta.", precio:"$695.00"},
+  {clave:"CH621242401", ref:"CH621242401", descripcion:"Collarín hidráulico para, Astra, Corsa, Meriva y Tornado.", precio:"$775.00"},
+  {clave:"CH622308101", ref:"CH622308101", descripcion:"Collarín hidráulico Eco Sport, Focus.", precio:"$605.00"},
+  {clave:"CH622331101", ref:"CH622331101", descripcion:"Collarín hidráulico para March, Versa, V-Drive.", precio:"$630.00"},
+  {clave:"CH623340601", ref:"CH623340601", descripcion:"Collarín hidráulico para Tiida 1.8L y Sentra", precio:"$740.00"},
+];
+
+// ============================================================
+// DATA — Collarín Mecánico (Vafri Ceramic)
+// ============================================================
+const colMecData = [
+  {clave:"CM619305601", ref:"CM619305601", descripcion:"Collarín mecánico para Beat, Matiz, Spark.", precio:"$180.00"},
+  {clave:"CM619319501", ref:"CM619319501", descripcion:"Collarín mecánico Attitude, Mirage G4.", precio:"$200.00"},
+  {clave:"CM620308901", ref:"CM620308901", descripcion:"Collarín mecánico para Aprio, Platina, Clio, Kangoo.", precio:"$115.00"},
+  {clave:"CM621207801", ref:"CM621207801", descripcion:"Collarín mecánico Pointer, Corsar.", precio:"$220.00"},
+  {clave:"CM621303101", ref:"CM621303101", descripcion:"Collarín mecánico para Attitude y Verna.", precio:"$155.00"},
+  {clave:"CM622240001", ref:"CM622240001", descripcion:"Collarín mecánico para, Bettle, derby, Jetta, Golf Cordoba.", precio:"$180.00"},
+  {clave:"CM622308902", ref:"CM622308902", descripcion:"Collarín mecánico para VW Polo, Seat Ibiza Cordoba", precio:"$224.00"},
+  {clave:"CM622314901", ref:"CM622314901", descripcion:"Collarín mecánico Aveo, Pontiac G3", precio:"$235.00"},
+  {clave:"CM622334302", ref:"CM622334302", descripcion:"Collarín mecánico para VW Vento 1.6L", precio:"$225.00"},
+  {clave:"CM623286402", ref:"CM623286402", descripcion:"Collarín mecánico para Toyota pick up.", precio:"$247.00"},
+  {clave:"CM624277501", ref:"CM624277501", descripcion:"Collarín mecánico para Nissan 2.4 y Frontier", precio:"$320.00"},
+  {clave:"CM625301002", ref:"CM625301002", descripcion:"Collarín mecánico para Toyota Hiace L4 06-15, Hilux", precio:"$198.00"},
+];
+
+// ============================================================
+// DATA — Disco de Clutch (Vafri Ceramic)
+// ============================================================
+const discoClutchData = [
+  {clave:"DC619234001", ref:"DC619234001", descripcion:"Disco de clutch para Matiz, Spark, Beat.", precio:"$495.00"},
+  {clave:"DC619242802", ref:"DC619242802", descripcion:"Disco de clutch para Ford Ikon.", precio:"$539.00"},
+  {clave:"DC622308902", ref:"DC622308902", descripcion:"Disco de clutch para VW polo, Ibiza y Cordoba", precio:"$623.00"},
+  {clave:"DC622331102", ref:"DC622331102", descripcion:"Disco de clutch para March 12-23, Tiida 13-18, V-Drive 20-22.", precio:"$475.00"},
+  {clave:"DC622334302", ref:"DC622334302", descripcion:"Disco de clutch para VW Vento 1.6L", precio:"$623.00"},
+  {clave:"DC623070503", ref:"DC623070503", descripcion:"Disco de clutch para Chevrolet S-10 Blazer L4 2.0L, Isuzu", precio:"$595.00"},
+  {clave:"DC623214103", ref:"DC623214103", descripcion:"Disco de clutch para GMC Blazer V6, 3.1L 1995", precio:"$610.00"},
+  {clave:"DC623286402", ref:"DC623286402", descripcion:"Disco de clutch para Toyota Pick up", precio:"$718.00"},
+  {clave:"DC623288702", ref:"DC623288702", descripcion:"Disco de clutch para Ford Ranger L4 2.3L 88-92, EJ-F23P", precio:"$505.00"},
+  {clave:"DC625301002", ref:"DC625301002", descripcion:"Disco de clutch para Toyota Hiace L4 06-15, Hilux 04-16.", precio:"$740.00"},
+  {clave:"DC628073203", ref:"DC628073203", descripcion:"Disco de clutch para Ford Custom, MICRO,F150.", precio:"$930.00"},
+  {clave:"DC630174303", ref:"DC630174303", descripcion:"Disco de clutch para Dodge Ram1500 5.2L Ram 2500", precio:"$995.00"},
+  {clave:"DC630213803", ref:"DC630213803", descripcion:"Disco de clutch para Chevrolet C15, Blazer, Suburban.", precio:"$1,020.00"},
+  {clave:"DC630303103", ref:"DC630303103", descripcion:"Disco de clutch para Dodge RAM2500 03-05, RAM 3500", precio:"$880.00"},
+  {clave:"DC187808003704", ref:"DC187808003704", descripcion:"Disco de clutch para Foton 17\"", precio:"$3,500.00"},
+];
+
+
+// ============================================================
+// STORAGE — precios editados y clientes
+// ============================================================
+const PRICES_KEY = 'vafri_prices_v1';
+const CLIENTS_KEY = 'vafri_clients_v1';
+
+function loadPrices() {
+  try { return JSON.parse(localStorage.getItem(PRICES_KEY) || '{}'); } catch(e){ return {}; }
+}
+function savePrices(obj) {
+  localStorage.setItem(PRICES_KEY, JSON.stringify(obj));
+}
+function loadClients() {
+  try { return JSON.parse(localStorage.getItem(CLIENTS_KEY) || '[]'); } catch(e){ return []; }
+}
+function saveClients(arr) {
+  localStorage.setItem(CLIENTS_KEY, JSON.stringify(arr));
+}
+
+let customPrices = loadPrices();
+let clients = loadClients();
+let editingClientId = null;
+
+// ============================================================
+// UTILIDADES
+// ============================================================
+function parsePrice(s) {
+  return parseFloat(String(s).replace(/[^0-9.]/g,'')) || 0;
+}
+function fmtMoney(n) {
+  return '$' + n.toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+function getPrice(id, raw) {
+  return customPrices[id] !== undefined ? customPrices[id] : parsePrice(raw);
+}
+
+// ============================================================
+// MODO EDITAR PRECIOS
+// ============================================================
+let editMode = false;
+function toggleEditPrices(btn) {
+  editMode = !editMode;
+  document.body.classList.toggle('edit-mode', editMode);
+  btn.classList.toggle('active', editMode);
+  btn.textContent = editMode ? '✅ Guardar precios' : '✏️ Editar precios';
+  if (!editMode) {
+    // Leer todos los inputs de precio y guardar
+    document.querySelectorAll('.editable-price[data-id]').forEach(inp => {
+      const id = inp.dataset.id;
+      const val = parsePrice(inp.value);
+      if (!isNaN(val) && val > 0) customPrices[id] = val;
+    });
+    savePrices(customPrices);
+    showToast('✅ Precios guardados correctamente');
+  }
+  renderAll();
+}
+
+function priceCell(rawPrice, itemId, addable=true) {
+  const val = getPrice(itemId, rawPrice);
+  const display = fmtMoney(val);
+  const inp = editMode
+    ? `<input class="editable-price" data-id="${itemId}" value="${display}" onclick="this.select()" onchange="previewPrice(this)">`
+    : `<span class="editable-price" data-id="${itemId}" style="cursor:default">${display}</span>`;
+  const btn = addable ? `<button class="add-btn" onclick="addToCart('${itemId}')" title="Agregar">+</button>` : '';
+  return `<div class="price-wrap">${inp}${btn}</div>`;
+}
+
+function previewPrice(inp) {
+  // Solo visual preview, se guarda al salir de edit mode
+}
+
+
+// ============================================================
+// FILTROS Y BÚSQUEDA
+// ============================================================
+let currentFilter = 'all';
+let searchTerm = '';
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    if (!b.id && b.textContent !== '✏️ Editar precios' && b.textContent !== '✅ Guardar precios' && !b.classList.contains('btn-clients') && !b.classList.contains('btn-edit-prices')) {
+      b.classList.remove('active');
+    }
+  });
+  if (btn && !btn.classList.contains('btn-edit-prices') && !btn.classList.contains('btn-clients')) {
+    btn.classList.add('active');
+  }
+  renderAll();
+}
+
+function filterTable() {
+  searchTerm = document.getElementById('searchInput').value.toLowerCase();
+  renderAll();
+}
+
+function matches(r, fields) {
+  if (!searchTerm) return true;
+  return fields.some(v => v && String(v).toLowerCase().includes(searchTerm));
+}
+
+// ============================================================
+// RENDER PRINCIPAL
+// ============================================================
+function renderAll() {
+  const show = cat => currentFilter === 'all' || currentFilter === cat;
+
+  const fClutch  = show('clutch')  ? clutchData.filter(r => matches(r,[r.fmsi,r.aplicacion])) : [];
+  const fTacon   = show('tacon')   ? taconData.filter(r  => matches(r,[r.fmsi,r.claveInt,r.descripcion])) : [];
+  const fBalatas = show('balatas') ? balatasData.filter(r => matches(r,[r.clave,r.fmsi,r.descripcion,r.posicion])) : [];
+  const fKit     = show('kit')     ? kitClutchData.filter(r => matches(r,[r.clave,r.ref,r.descripcion])) : [];
+  const fColHid  = show('colhid') ? colHidData.filter(r   => matches(r,[r.clave,r.ref,r.descripcion])) : [];
+  const fColMec  = show('colmec') ? colMecData.filter(r   => matches(r,[r.clave,r.ref,r.descripcion])) : [];
+  const fDisco   = show('disco')  ? discoClutchData.filter(r => matches(r,[r.clave,r.ref,r.descripcion])) : [];
+
+  renderClutch(fClutch);
+  renderTacon(fTacon);
+  renderBalatas(fBalatas);
+  renderSimple('bodyKit',   fKit,   ['clave','ref','descripcion'], 'kit-');
+  renderSimple('bodyColHid',fColHid,['clave','ref','descripcion'], 'colhid-');
+  renderSimple('bodyColMec',fColMec,['clave','ref','descripcion'], 'colmec-');
+  renderSimple('bodyDisco', fDisco, ['clave','ref','descripcion'], 'disco-');
+
+  const total = fClutch.length+fTacon.length+fBalatas.length+fKit.length+fColHid.length+fColMec.length+fDisco.length;
+  document.getElementById('resultCount').textContent = `Mostrando ${total} producto${total!==1?'s':''}`;
+
+  const allTotal = clutchData.length+taconData.length+balatasData.length+kitClutchData.length+colHidData.length+colMecData.length+discoClutchData.length;
+  document.getElementById('totalCount').textContent = allTotal;
+
+  const secs = {clutch:fClutch,tacon:fTacon,balatas:fBalatas,kit:fKit,colhid:fColHid,colmec:fColMec,disco:fDisco};
+  Object.entries(secs).forEach(([k,arr]) => {
+    const vis = show(k) ? '' : 'none';
+    document.getElementById('sec-'+k).style.display = vis;
+    const tbl = {clutch:'tableCLUTCH',tacon:'tableTACON',balatas:'tableBALATAS',kit:'tableKIT',colhid:'tableCOLHID',colmec:'tableCOLMEC',disco:'tableDISCO'}[k];
+    document.getElementById(tbl).style.display = vis;
+  });
+}
+
+function renderClutch(data) {
+  const body = document.getElementById('bodyClutch');
+  if (!data.length) { body.innerHTML='<tr><td colspan="6" class="no-results">Sin resultados</td></tr>'; return; }
+  body.innerHTML = data.map(r => {
+    const cols = ['vfb','vfc','vfr','vfk'].map(col => {
+      const id = 'clutch-'+r.fmsi+'-'+col;
+      return `<td>${r[col] ? priceCell(r[col], id) : '<span class="price-empty">—</span>'}</td>`;
+    }).join('');
+    return `<tr><td><span class="fmsi-code">${r.fmsi}</span></td><td>${r.aplicacion}</td>${cols}</tr>`;
+  }).join('');
+}
+
+function renderTacon(data) {
+  const body = document.getElementById('bodyTacon');
+  if (!data.length) { body.innerHTML='<tr><td colspan="4" class="no-results">Sin resultados</td></tr>'; return; }
+  body.innerHTML = data.map(r => {
+    const id = 'tacon-'+r.claveInt;
+    return `<tr>
+      <td><span class="fmsi-code">${r.fmsi}</span></td>
+      <td><span class="clave-code">${r.claveInt}</span></td>
+      <td>${r.descripcion}</td>
+      <td>${priceCell(r.precio,id)}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderBalatas(data) {
+  const body = document.getElementById('bodyBalatas');
+  if (!data.length) { body.innerHTML='<tr><td colspan="5" class="no-results">Sin resultados</td></tr>'; return; }
+  body.innerHTML = data.map(r => {
+    const id = 'balatas-'+r.clave;
+    const posClass = r.posicion && r.posicion.toLowerCase().includes('tra') ? 'tag-tra' : 'tag-del';
+    return `<tr>
+      <td><span class="clave-code">${r.clave}</span></td>
+      <td><span class="fmsi-code">${r.fmsi}</span></td>
+      <td><span class="tag-pos ${posClass}">${r.posicion}</span></td>
+      <td>${r.descripcion}</td>
+      <td>${priceCell(r.precio,id)}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderSimple(bodyId, data, fields, prefix) {
+  const body = document.getElementById(bodyId);
+  if (!data.length) { body.innerHTML=`<tr><td colspan="4" class="no-results">Sin resultados</td></tr>`; return; }
+  body.innerHTML = data.map(r => {
+    const id = prefix+r.clave;
+    return `<tr>
+      <td><span class="clave-code">${r.clave}</span></td>
+      <td><span class="fmsi-code">${r.ref}</span></td>
+      <td>${r.descripcion}</td>
+      <td>${priceCell(r.precio, id)}</td>
+    </tr>`;
+  }).join('');
+}
+
+
+// ============================================================
+// CARRITO / COTIZACIÓN
+// ============================================================
+const itemIndex = {};
+
+function buildIndex() {
+  clutchData.forEach(r => {
+    [['vfb','VFB'],['vfc','VFC'],['vfr','VFR'],['vfk','VFK']].forEach(([col,label]) => {
+      if (r[col]) {
+        const id = 'clutch-'+r.fmsi+'-'+col;
+        itemIndex[id] = { clave:r.fmsi+' ('+label+')', desc:r.aplicacion, rawPrice:r[col], cat:'Pasta Clutch' };
+      }
+    });
+  });
+  taconData.forEach(r => {
+    const id = 'tacon-'+r.claveInt;
+    itemIndex[id] = { clave:r.claveInt+' / '+r.fmsi, desc:r.descripcion, rawPrice:r.precio, cat:'Tacón Cerametálico' };
+  });
+  balatasData.forEach(r => {
+    const id = 'balatas-'+r.clave;
+    itemIndex[id] = { clave:r.clave+' / '+r.fmsi, desc:r.descripcion+' ('+r.posicion+')', rawPrice:r.precio, cat:'Balatas Ceramic' };
+  });
+  kitClutchData.forEach(r => {
+    const id = 'kit-'+r.clave;
+    itemIndex[id] = { clave:r.clave, desc:r.descripcion, rawPrice:r.precio, cat:'Kit Clutch' };
+  });
+  colHidData.forEach(r => {
+    const id = 'colhid-'+r.clave;
+    itemIndex[id] = { clave:r.clave, desc:r.descripcion, rawPrice:r.precio, cat:'Collarín Hidráulico' };
+  });
+  colMecData.forEach(r => {
+    const id = 'colmec-'+r.clave;
+    itemIndex[id] = { clave:r.clave, desc:r.descripcion, rawPrice:r.precio, cat:'Collarín Mecánico' };
+  });
+  discoClutchData.forEach(r => {
+    const id = 'disco-'+r.clave;
+    itemIndex[id] = { clave:r.clave, desc:r.descripcion, rawPrice:r.precio, cat:'Disco de Clutch' };
+  });
+}
+
+let cart = {};
+
+function addToCart(id) {
+  const ref = itemIndex[id];
+  if (!ref) return;
+  if (cart[id]) { cart[id].qty += 1; }
+  else { cart[id] = { ...ref, qty:1 }; }
+  updateCartBadge();
+  showToast('➕ Agregado: ' + ref.clave);
+}
+
+function removeFromCart(id) { delete cart[id]; renderCart(); updateCartBadge(); }
+function setQty(id,val) { const q=Math.max(1,parseInt(val)||1); if(cart[id])cart[id].qty=q; renderCart(); updateCartBadge(); }
+function clearCart() { cart={}; renderCart(); updateCartBadge(); }
+function updateCartBadge() {
+  const n = Object.values(cart).reduce((s,it)=>s+it.qty,0);
+  document.getElementById('cartBadge').textContent = n;
+}
+
+function computeTotals() {
+  const items = Object.entries(cart);
+  let subtotal = 0;
+  items.forEach(([id,it]) => {
+    const p = customPrices[id] !== undefined ? customPrices[id] : parsePrice(it.rawPrice);
+    subtotal += p * it.qty;
+  });
+  const d1 = parseFloat(document.getElementById('desc1').value)||0;
+  const d2 = parseFloat(document.getElementById('desc2').value)||0;
+  const d3 = parseFloat(document.getElementById('desc3').value)||0;
+  const applyIva = document.getElementById('ivaToggle').checked;
+  let running = subtotal;
+  const steps = [];
+  [d1,d2,d3].forEach((d,i) => {
+    if(d>0){
+      const amt = running*(d/100);
+      steps.push({ label:'Descuento '+(i+1)+' ('+d+'%)', amount:amt });
+      running -= amt;
+    }
+  });
+  const beforeIva = running;
+  const iva = applyIva ? beforeIva*0.16 : 0;
+  return { subtotal, steps, beforeIva, iva, applyIva, total:beforeIva+iva, items };
+}
+
+function openCart() { document.getElementById('cartModal').classList.add('open'); renderCart(); }
+function closeCart() { document.getElementById('cartModal').classList.remove('open'); }
+
+function renderCart() {
+  const body = document.getElementById('cartBody');
+  const entries = Object.entries(cart);
+  if (!entries.length) {
+    body.innerHTML = '<tr><td colspan="6" class="empty-cart">Busca un artículo y presiona "+" para agregarlo aquí.</td></tr>';
+  } else {
+    body.innerHTML = entries.map(([id,it]) => {
+      const p = customPrices[id] !== undefined ? customPrices[id] : parsePrice(it.rawPrice);
+      return `<tr>
+        <td><span class="clave-code">${it.clave}</span></td>
+        <td>${it.desc}</td>
+        <td><input type="number" class="qty-input" min="1" value="${it.qty}" onchange="setQty('${id}',this.value)"></td>
+        <td>${fmtMoney(p)}</td>
+        <td>${fmtMoney(p*it.qty)}</td>
+        <td><button class="remove-btn" onclick="removeFromCart('${id}')">✕</button></td>
+      </tr>`;
+    }).join('');
+  }
+  const t = computeTotals();
+  let html = `<div class="totals-row"><span>Subtotal</span><span>${fmtMoney(t.subtotal)}</span></div>`;
+  t.steps.forEach(s => html += `<div class="totals-row discount"><span>${s.label}</span><span>- ${fmtMoney(s.amount)}</span></div>`);
+  if (t.steps.length) html += `<div class="totals-row"><span>Subtotal c/descuento</span><span>${fmtMoney(t.beforeIva)}</span></div>`;
+  if (t.applyIva) html += `<div class="totals-row"><span>IVA (16%)</span><span>${fmtMoney(t.iva)}</span></div>`;
+  html += `<div class="totals-row grand"><span>Total</span><span>${fmtMoney(t.total)}</span></div>`;
+  document.getElementById('totalsBox').innerHTML = html;
+}
+
+// ============================================================
+// PDF / IMPRIMIR
+// ============================================================
+function buildPrintQuote() {
+  const t = computeTotals();
+  const empresa = document.getElementById('cliEmpresa').value || 'Cliente';
+  const nombre  = document.getElementById('cliNombre').value || '';
+  const ubicacion = document.getElementById('cliUbicacion').value || '';
+  const tel    = document.getElementById('cliTel').value || '';
+  const fecha  = new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'});
+
+  const rows = t.items.map(([id,it]) => {
+    const p = customPrices[id] !== undefined ? customPrices[id] : parsePrice(it.rawPrice);
+    return `<tr>
+      <td>${it.qty}</td><td>Pza.</td>
+      <td>${it.desc}</td><td>${it.clave}</td>
+      <td class="num">${fmtMoney(p)}</td>
+      <td class="num">${fmtMoney(p*it.qty)}</td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="6" style="text-align:center;color:#999;padding:12px">Sin artículos</td></tr>`;
+
+  let tot = `<div class="row"><span>Subtotal</span><span>${fmtMoney(t.subtotal)}</span></div>`;
+  t.steps.forEach(s => tot += `<div class="row"><span>${s.label}</span><span>- ${fmtMoney(s.amount)}</span></div>`);
+  if (t.steps.length) tot += `<div class="row"><span>Subtotal c/descuento</span><span>${fmtMoney(t.beforeIva)}</span></div>`;
+  if (t.applyIva) tot += `<div class="row"><span>IVA (16%)</span><span>${fmtMoney(t.iva)}</span></div>`;
+  tot += `<div class="row grand"><span>Total</span><span>${fmtMoney(t.total)}</span></div>`;
+
+  document.getElementById('printQuote').innerHTML = `
+    <div class="pq-header">
+      <div class="pq-logo"><span>vafri</span> noroeste</div>
+      <div class="pq-meta">Cotización<br>Fecha: ${fecha}<br>Asesor: David Aguilar Castrejón<br>443-859-9943 · 443-279-8762</div>
+    </div>
+    <div class="pq-client">
+      <b>Cliente:</b> ${empresa}<br>
+      ${nombre ? '<b>Atención a:</b> '+nombre+'<br>' : ''}
+      ${ubicacion ? '<b>Ubicación:</b> '+ubicacion+'<br>' : ''}
+      ${tel ? '<b>Tel:</b> '+tel+'<br>' : ''}
+    </div>
+    <table class="pq-table">
+      <thead><tr><th>Cant.</th><th>U.</th><th>Descripción</th><th>Clave</th><th class="num">P. Unit.</th><th class="num">Importe</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div class="pq-totals">${tot}</div>
+    <div class="pq-note">Precios no incluyen I.V.A. salvo indicación. Cotización sujeta a cambios sin previo aviso.</div>
+  `;
+}
+
+function printQuote() { buildPrintQuote(); window.print(); }
+
+// ============================================================
+// CORREO
+// ============================================================
+function emailQuote() {
+  const t = computeTotals();
+  if (!t.items.length) { alert('Agrega artículos antes de enviar.'); return; }
+  const empresa = document.getElementById('cliEmpresa').value || 'Cliente';
+  const nombre  = document.getElementById('cliNombre').value || '';
+  const ubicacion = document.getElementById('cliUbicacion').value || '';
+  const email   = document.getElementById('cliEmail').value || '';
+  const fecha   = new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'});
+  let body = `Cotización Vafri Noroeste — ${fecha}\n`;
+  body += `Cliente: ${empresa}\n`;
+  if (nombre) body += `Atención a: ${nombre}\n`;
+  if (ubicacion) body += `Ubicación: ${ubicacion}\n`;
+  body += `\nARTÍCULOS:\n`;
+  t.items.forEach(([id,it]) => {
+    const p = customPrices[id] !== undefined ? customPrices[id] : parsePrice(it.rawPrice);
+    body += `  ${it.qty} x ${it.clave} — ${it.desc}  |  ${fmtMoney(p)} c/u = ${fmtMoney(p*it.qty)}\n`;
+  });
+  body += `\nSubtotal: ${fmtMoney(t.subtotal)}\n`;
+  t.steps.forEach(s => body += `${s.label}: -${fmtMoney(s.amount)}\n`);
+  if (t.steps.length) body += `Subtotal c/descuento: ${fmtMoney(t.beforeIva)}\n`;
+  if (t.applyIva) body += `IVA (16%): ${fmtMoney(t.iva)}\n`;
+  body += `TOTAL: ${fmtMoney(t.total)}\n\nPrecios sujetos a cambio sin previo aviso.`;
+  const subj = `Cotización Vafri Noroeste — ${empresa} — ${fecha}`;
+  window.location.href = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
+}
+
+
+// ============================================================
+// CLIENTES
+// ============================================================
+function openClients() {
+  document.getElementById('clientsModal').classList.add('open');
+  renderClientList();
+  updateClientCount();
+}
+function closeClients() {
+  document.getElementById('clientsModal').classList.remove('open');
+  cancelClientForm();
+}
+
+function updateClientCount() {
+  document.getElementById('clientCount').textContent = clients.length;
+}
+
+function renderClientList() {
+  const q = (document.getElementById('clientSearch').value||'').toLowerCase();
+  const filtered = clients.filter(c =>
+    !q ||
+    (c.empresa||'').toLowerCase().includes(q) ||
+    (c.nombre||'').toLowerCase().includes(q) ||
+    (c.ciudad||'').toLowerCase().includes(q)
+  );
+  const el = document.getElementById('clientsList');
+  if (!filtered.length) {
+    el.innerHTML = `<div style="padding:20px;text-align:center;color:var(--gray);font-size:13px">
+      ${clients.length ? 'No se encontraron clientes con esa búsqueda.' : 'Aún no hay clientes. Usa "+ Nuevo cliente" para agregar.'}
+    </div>`;
+    return;
+  }
+  el.innerHTML = filtered.map(c => `
+    <div class="client-row" id="clirow-${c.id}">
+      <div class="client-avatar">${(c.empresa||c.nombre||'?').charAt(0).toUpperCase()}</div>
+      <div class="client-info">
+        <div class="client-name">${c.empresa || c.nombre}</div>
+        <div class="client-sub">${[c.nombre,c.ciudad,c.email,c.telefono].filter(Boolean).join(' · ')}</div>
+      </div>
+      <div class="client-actions">
+        <button class="icon-btn use" onclick="useClient('${c.id}')">Usar</button>
+        <button class="icon-btn" onclick="editClient('${c.id}')">✏️</button>
+        <button class="icon-btn" onclick="deleteClient('${c.id}')">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleNewClientForm() {
+  editingClientId = null;
+  document.getElementById('clientFormTitle').textContent = 'Nuevo cliente';
+  clearClientForm();
+  const f = document.getElementById('newClientForm');
+  f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+
+function cancelClientForm() {
+  document.getElementById('newClientForm').style.display = 'none';
+  editingClientId = null;
+  clearClientForm();
+}
+
+function clearClientForm() {
+  ['fc_empresa','fc_nombre','fc_telefono','fc_email','fc_ciudad','fc_desc'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+}
+
+function saveClient() {
+  const data = {
+    empresa:   document.getElementById('fc_empresa').value.trim(),
+    nombre:    document.getElementById('fc_nombre').value.trim(),
+    telefono:  document.getElementById('fc_telefono').value.trim(),
+    email:     document.getElementById('fc_email').value.trim(),
+    ciudad:    document.getElementById('fc_ciudad').value.trim(),
+    desc:      parseFloat(document.getElementById('fc_desc').value)||0,
+  };
+  if (!data.empresa && !data.nombre) { alert('Ingresa al menos el nombre de empresa o contacto.'); return; }
+
+  if (editingClientId) {
+    const idx = clients.findIndex(c => c.id === editingClientId);
+    if (idx !== -1) clients[idx] = { ...clients[idx], ...data };
+    editingClientId = null;
+  } else {
+    clients.push({ id: uid(), ...data });
+  }
+  saveClients(clients);
+  updateClientCount();
+  renderClientList();
+  cancelClientForm();
+  showToast('✅ Cliente guardado');
+}
+
+function editClient(id) {
+  const c = clients.find(x => x.id === id);
+  if (!c) return;
+  editingClientId = id;
+  document.getElementById('clientFormTitle').textContent = 'Editar cliente';
+  document.getElementById('fc_empresa').value  = c.empresa || '';
+  document.getElementById('fc_nombre').value   = c.nombre || '';
+  document.getElementById('fc_telefono').value = c.telefono || '';
+  document.getElementById('fc_email').value    = c.email || '';
+  document.getElementById('fc_ciudad').value   = c.ciudad || '';
+  document.getElementById('fc_desc').value     = c.desc || 0;
+  document.getElementById('newClientForm').style.display = 'block';
+  document.getElementById('newClientForm').scrollIntoView({behavior:'smooth'});
+}
+
+function deleteClient(id) {
+  if (!confirm('¿Eliminar este cliente?')) return;
+  clients = clients.filter(c => c.id !== id);
+  saveClients(clients);
+  updateClientCount();
+  renderClientList();
+  showToast('🗑️ Cliente eliminado');
+}
+
+function useClient(id) {
+  const c = clients.find(x => x.id === id);
+  if (!c) return;
+  // Llenar campos de cotización
+  document.getElementById('cliEmpresa').value  = c.empresa || '';
+  document.getElementById('cliNombre').value   = c.nombre || '';
+  document.getElementById('cliUbicacion').value= c.ciudad || '';
+  document.getElementById('cliEmail').value    = c.email || '';
+  document.getElementById('cliTel').value      = c.telefono || '';
+  // Aplicar descuento habitual si tiene
+  if (c.desc > 0) document.getElementById('desc1').value = c.desc;
+  closeClients();
+  openCart();
+  showToast('👤 Cliente cargado: ' + (c.empresa || c.nombre));
+}
+
+// ============================================================
+// INIT
+// ============================================================
+buildIndex();
+renderAll();
+updateClientCount();
+
+</script>
+</body>
+</html>
